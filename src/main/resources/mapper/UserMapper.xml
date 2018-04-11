@@ -22,7 +22,7 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectByUsername" resultType="com.thesis.common.model.User">
-      SELECT username, password, salt,status from USER
+      SELECT id,username, password, salt,status from USER
       WHERE username = #{username}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

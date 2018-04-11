@@ -1,15 +1,15 @@
 package com.thesis.config;
 
-import com.thesis.common.secutiry.LoginFailureHandler;
+import com.thesis.common.secutiry.FailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
 
 /**
  * @Author: ZcEdiaos
@@ -21,6 +21,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler failureHandler;
+
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
             "/v2/api-docs",
@@ -30,29 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/authentication/require"
+            "/authentication/require",
+            "/login.html"
             // other public endpoints of your API may be appended to this array
     };
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/authentication/require")
-                .loginProcessingUrl("/user/login")
-                .successForwardUrl("/index.html")
-                .failureHandler(new LoginFailureHandler())
+                .failureHandler(failureHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login.html").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().disable();
+                .anyRequest().access("@rbacService.hasPermission(request, authentication)")
+                .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
     }
 
 }

@@ -2,6 +2,9 @@ package com.thesis.dao.mapper;
 
 import com.thesis.common.model.RolePermission;
 
+import java.util.Collection;
+import java.util.Set;
+
 public interface RolePermissionMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +17,6 @@ public interface RolePermissionMapper {
     int updateByPrimaryKeySelective(RolePermission record);
 
     int updateByPrimaryKey(RolePermission record);
+
+    Set<Short> getPermissionIdByRoles(Collection<Byte> roleIds);
 }

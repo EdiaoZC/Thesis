@@ -2,6 +2,8 @@ package com.thesis.service;
 
 import com.thesis.common.model.User;
 
+import java.util.Set;
+
 /**
  * @Author: ZcEdiaos
  * @Date: 2018/4/8 14:22
@@ -23,4 +25,7 @@ public interface UserService {
      * @return
      */
     int insertUser(User user);
+
+
+
 }

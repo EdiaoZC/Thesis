@@ -15,7 +15,10 @@
     from user_role
     where id = #{id,jdbcType=TINYINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
+    <select id="selectByUserId" resultType="java.lang.Byte">
+      select role_id from user_role where user_id =#{userId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
     delete from user_role
     where id = #{id,jdbcType=TINYINT}
   </delete>
