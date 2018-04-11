@@ -2,10 +2,12 @@ package com.thesis.common.model;
 
 import java.util.Date;
 
-public class EquipmentInfo {
+public class DeviceType {
     private Byte id;
 
-    private String equipmentParameter;
+    private String equipmentName;
+
+    private Byte pid;
 
     private Date createTime;
 
@@ -19,12 +21,20 @@ public class EquipmentInfo {
         this.id = id;
     }
 
-    public String getEquipmentParameter() {
-        return equipmentParameter;
+    public String getEquipmentName() {
+        return equipmentName;
     }
 
-    public void setEquipmentParameter(String equipmentParameter) {
-        this.equipmentParameter = equipmentParameter == null ? null : equipmentParameter.trim();
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName == null ? null : equipmentName.trim();
+    }
+
+    public Byte getPid() {
+        return pid;
+    }
+
+    public void setPid(Byte pid) {
+        this.pid = pid;
     }
 
     public Date getCreateTime() {

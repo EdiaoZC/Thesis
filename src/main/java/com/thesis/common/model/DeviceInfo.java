@@ -1,22 +1,23 @@
 package com.thesis.common.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
 @Setter
-public class Equipment {
-    private Short id;
+@ToString
+@EqualsAndHashCode
+public class DeviceInfo {
+    private Byte id;
 
-    private Byte equipmentType;
-
-    private Byte equipmentState;
+    private String equipmentParameter;
 
     private Date createTime;
 
     private Date updateTime;
-
 
 }

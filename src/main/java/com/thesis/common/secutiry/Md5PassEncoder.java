@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Slf4j
+@Component
 public class Md5PassEncoder implements PasswordEncoder {
 
     @Override
@@ -32,8 +33,6 @@ public class Md5PassEncoder implements PasswordEncoder {
             log.warn("Empty encoded password");
             return false;
         }
-        log.info(SaltHolder.getSalt());
-        log.info(rawPassword.toString());
         String password = Md5Util.getMD5AndSalt(rawPassword.toString(), SaltHolder.getSalt());
         SaltHolder.remove();
         log.info(password + "========" + encodedPassword);

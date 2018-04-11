@@ -7,13 +7,13 @@
         <result column="password" jdbcType="CHAR" property="password"/>
         <result column="salt" jdbcType="CHAR" property="salt"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
-        <result column="sex" jdbcType="VARCHAR" property="sex" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, username, password,salt, nickname, sex, status, create_time, update_time
+    id, username, password, salt, nickname, sex, status, create_time, update_time
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -21,21 +21,21 @@
         from user
         where id = #{id,jdbcType=BIGINT}
     </select>
-    <select id="selectByUsername" resultType="user">
-        SELECT username,password,salt,status FROM  user
-        WHERE username = #{username}
+    <select id="selectByUsername" resultType="com.thesis.common.model.User">
+      SELECT username, password, salt,status from USER
+      WHERE username = #{username}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.thesis.common.model.User">
-    insert into user (id, username, password,salt
-      nickname, sex, status,create_time,
-      update_time)
-    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=CHAR},
-      ,#{salt,jdbcType=CHAR},#{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR},#{status,jdbcType=TINYINT}
-      , #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into user (id, username, password, 
+      salt, nickname, sex, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=CHAR}, 
+      #{salt,jdbcType=CHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
     <insert id="insertSelective" parameterType="com.thesis.common.model.User">
         insert into user
@@ -108,7 +108,7 @@
                 password = #{password,jdbcType=CHAR},
             </if>
             <if test="salt != null">
-                #{salt,jdbcType=CHAR},
+                salt = #{salt,jdbcType=CHAR},
             </if>
             <if test="nickname != null">
                 nickname = #{nickname,jdbcType=VARCHAR},
@@ -116,8 +116,8 @@
             <if test="sex != null">
                 sex = #{sex,jdbcType=CHAR},
             </if>
-            <if test="status !=null">
-                status =#{status,jdbcType=TINYINT}
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -135,7 +135,7 @@
       salt = #{salt,jdbcType=CHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=CHAR},
-      status = #{status,jdbcType=TINYINT}
+      status = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

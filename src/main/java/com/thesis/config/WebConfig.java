@@ -3,15 +3,10 @@ package com.thesis.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -26,8 +21,8 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@EnableSwagger2
-@ComponentScan("com.thesis.web.controller")
+@ComponentScan("com.thesis.web")
+@Import(SwaggerConfig.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 
@@ -40,24 +35,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
 
-    @Bean
-    public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.thesis.web.controller"))
-                .paths(PathSelectors.any())
-                .build();
-    }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("毕业设计 Restful API")
-                .termsOfServiceUrl("https://github.com/EdiaoZC")
-                .contact(new Contact("张超", null, "1132809782@qq.com"))
-                .version("1.0.0")
-                .build();
-    }
 
 
     @Override
@@ -76,5 +54,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         configurer.enable();
     }
 
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 
 }

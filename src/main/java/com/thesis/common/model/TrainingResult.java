@@ -1,12 +1,16 @@
 package com.thesis.common.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class TrainingResult {
     private Long id;
 
@@ -19,6 +23,5 @@ public class TrainingResult {
     private String trainingResult;
 
     private Byte trainingScore;
-
 
 }
