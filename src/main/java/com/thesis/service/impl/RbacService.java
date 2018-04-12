@@ -1,5 +1,6 @@
 package com.thesis.service.impl;
 
+import com.thesis.service.PermissionService;
 import com.thesis.service.RoleService;
 import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +27,18 @@ public class RbacService {
 
     private PathMatcher pathMatcher = new AntPathMatcher();
 
-
     @Autowired
-    private RoleService roleService;
+    private PermissionService permissionService;
 
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
         Object principal = auth.getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
             Set<String> urls = getUrlsByUserName(username);
+            log.debug("url对象是:{}", urls);
+            if (urls == null) {
+
+            }
             for (String url : urls) {
                 log.debug(url + "========" + request.getRequestURI());
                 if (pathMatcher.match(url, request.getRequestURI())) {
@@ -54,7 +58,7 @@ public class RbacService {
      * @return 用户可以访问的用户权限
      */
     Set<String> getUrlsByUserName(String username) {
-        return roleService.getRoleByUsername(username);
+        return permissionService.getUrlsByUserName(username);
     }
 
 

@@ -27,7 +27,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         com.thesis.common.model.User user = userService.loadUserByName(username);
-        log.info("获取到的用户信息是" + user);
+        log.debug("获取到的用户信息是" + user);
         if (user == null) {
             throw new BadCredentialsException("用户名或密码错误");
         }

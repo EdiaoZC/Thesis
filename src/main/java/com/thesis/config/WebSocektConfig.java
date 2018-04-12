@@ -8,6 +8,5 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
  * @Description:
  */
 @EnableWebSocket
-
 public class WebSocektConfig {
 }

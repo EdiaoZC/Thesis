@@ -1,23 +1,26 @@
 package com.thesis.web.controller;
 
+import com.thesis.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 /**
@@ -26,7 +29,6 @@ import java.io.IOException;
  * @Description:
  */
 @Slf4j
-@RequestMapping("/authentication")
 @Controller
 public class AuthenticationController {
 
@@ -34,12 +36,18 @@ public class AuthenticationController {
     @Value("${failureUrl}")
     private String failureUrl;
 
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+    @Autowired
+    private AuthService authService;
+
     @ApiOperation("校验用户登陆界面功能")
-    @GetMapping(value = "/require", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/authentication/require", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> require(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
@@ -52,4 +60,13 @@ public class AuthenticationController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("请登录后再进行操作");
     }
+
+    @ApiOperation("用户登陆")
+    @PostMapping(value = "${jwt.loginUrl}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> login(String username, String password) {
+        String token = authService.login(username, password);
+        log.debug("产生的token值是:{}", token);
+        return ResponseEntity.ok(token);
+    }
+
 }

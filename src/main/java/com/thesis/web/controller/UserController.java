@@ -36,13 +36,6 @@ public class UserController {
     private UserService userService;
 
 
-    @ApiOperation("用户登陆")
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> login(String username, String password) throws IOException {
-        log.info("登陆成功");
-        return ResponseEntity.ok("登陆成功");
-    }
-
 
     @ApiOperation("注册用户")
     @ApiResponses({

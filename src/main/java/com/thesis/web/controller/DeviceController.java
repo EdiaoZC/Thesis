@@ -7,8 +7,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class DeviceController {
 
     @ApiOperation("添加设备")
     @PostMapping
-    public ResponseEntity<String> addDevice(Device device) {
+    public ResponseEntity<String> addDevice(@Valid Device device, Errors errors) {
         return ResponseEntity.ok("添加设备");
     }
 

@@ -18,7 +18,7 @@ public class Md5PassEncoder implements PasswordEncoder {
     @Override
     public String encode(CharSequence rawPassword) {
         String salt = Md5Util.gensalt(6);
-        log.info("盐时多少{}", salt);
+        log.debug("盐时多少{}", salt);
         SaltHolder.setSalt(salt);
         return Md5Util.getMD5AndSalt(rawPassword.toString(), salt);
     }
