@@ -2,13 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>登录页面</title>
+
+    <link rel="stylesheet" type="text/css" href="assert/css/login.css"/>
+    <script type="text/javascript" src="assert/js/login.js"></script>
 </head>
-<body>
-<form action="user/login" method="post">
-    <input type="text" name="username"/><br/>
-    <input type="password" name="password"/><br/>
-    <input type="submit" value="登陆">
-</form>
+
+<body background="assert/img/login_back.jpg">
+<div id="login_frame">
+
+    <p id="image_logo"><img src="assert/img/139-160531144509.jpg"></p>
+
+    <form method="post" action="user/login">
+
+        <p><label class="label_input">用户名</label><input type="text" id="username" name="username" class="text_field"/></p>
+        <p><label class="label_input">密码</label><input type="password" id="password" name="password" class="text_field"/></p>
+
+
+        <div id="login_control">
+            <input type="submit" id="btn_login" value="登录" onclick="login();"/>
+            <a id="forget_pwd" href="forget_pwd.html">忘记密码？</a>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>

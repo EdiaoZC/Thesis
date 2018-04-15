@@ -23,7 +23,6 @@ public class RoleServiceImpl implements RoleService {
 
 
 
-
     @Override
     public Set<String> getRoleByUsername(String username) {
         return null;

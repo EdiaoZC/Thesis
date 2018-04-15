@@ -1,15 +1,12 @@
 package com.thesis.web.controller;
 
-import com.thesis.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -43,8 +40,6 @@ public class AuthenticationController {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    @Autowired
-    private AuthService authService;
 
     @ApiOperation("校验用户登陆界面功能")
     @GetMapping(value = "/authentication/require", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -62,11 +57,9 @@ public class AuthenticationController {
     }
 
     @ApiOperation("用户登陆")
-    @PostMapping(value = "${jwt.loginUrl}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/user/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> login(String username, String password) {
-        String token = authService.login(username, password);
-        log.debug("产生的token值是:{}", token);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok("hello");
     }
 
 }

@@ -2,16 +2,18 @@ package com.thesis.config;
 
 import com.thesis.common.secutiry.filter.JwtAuthenticationTokenFilter;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -28,9 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
-
     @Autowired
     private AuthenticationFailureHandler failureHandler;
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
+    @Autowired
+    private JwtAuthenticationTokenFilter authenticationTokenFilter;
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
@@ -42,31 +47,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/webjars/**",
             "/authentication/require",
-            "/login.html"
+            "/*.html",
+            "/assert/**"
             // other public endpoints of your API may be appended to this array
     };
 
     @Value("${jwt.loginUrl}")
     private String loginUrl;
 
-    @Autowired
-    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.info(loginUrl);
         http.formLogin()
                 .loginPage("/authentication/require")
                 .loginProcessingUrl(loginUrl)
+                .successHandler(successHandler)
                 .failureHandler(failureHandler)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest().access("@rbacService.hasPermission(request, authentication)")
-                .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler)
-                .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.headers().cacheControl();
     }
 
 }

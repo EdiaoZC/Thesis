@@ -5,12 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -62,9 +62,9 @@ public class JwtTokenUtil implements Serializable {
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
+             claims = Jwts.parser()
+                    .setSigningKey(Base64.get().encodeToString("this-really-needs-to-be-changed"))
+                    .parseClaimsJwt(token)
                     .getBody();
         } catch (Exception e) {
             claims = null;
@@ -118,10 +118,12 @@ public class JwtTokenUtil implements Serializable {
         return refreshedToken;
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails user) {
+
         final String username = getUsernameFromToken(token);
-        return (
-                username.equals(userDetails.getUsername())
-                        && !isTokenExpired(token));
+        final Date created = getCreatedDateFromToken(token);
+        //final Date expiration = getExpirationDateFromToken(token);
+        return (username.equals(user.getUsername()) && !isTokenExpired(token));
     }
 }
+

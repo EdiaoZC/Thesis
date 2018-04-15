@@ -6,6 +6,7 @@ import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,12 +33,13 @@ public class RbacService {
 
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
         Object principal = auth.getPrincipal();
+        log.debug(principal.getClass().getName());
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
             Set<String> urls = getUrlsByUserName(username);
             log.debug("url对象是:{}", urls);
             if (urls == null) {
-
+                throw new AuthorizationServiceException("你没有相应权限，请联系系统管理员！");
             }
             for (String url : urls) {
                 log.debug(url + "========" + request.getRequestURI());
