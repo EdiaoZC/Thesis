@@ -1,7 +1,7 @@
 package com.thesis.common.secutiry.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.thesis.common.constants.ErrorMsg;
+import com.thesis.common.constants.Error;
 import com.thesis.common.model.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
         log.error("发生异常{}", accessDeniedException.getMessage());
         PrintWriter writer = response.getWriter();
         writer.write(JSON.toJSONString(Response.builder().code(HttpServletResponse.SC_FORBIDDEN)
-                .msg(ErrorMsg.ACCESS_DENIED).build()));
+                .msg(Error.ACCESS_DENIED).build()));
         writer.flush();
         writer.close();
     }
