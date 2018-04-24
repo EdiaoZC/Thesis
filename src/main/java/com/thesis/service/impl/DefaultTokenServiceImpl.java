@@ -41,7 +41,7 @@ public class DefaultTokenServiceImpl implements TokenService {
 
     @Override
     public UserDetails getUserInfoFromToken(String token) throws ExecutionException {
-        return tokenCache.getUnchecked(token);
+        return tokenCache.get(token);
     }
 
     @Override

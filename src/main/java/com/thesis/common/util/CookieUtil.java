@@ -1,5 +1,7 @@
 package com.thesis.common.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,17 +13,23 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2018/4/16 17:34
  * @Description:
  */
+@Slf4j
 public class CookieUtil {
 
 
-    public static void addCookie(HttpServletResponse response, String name, String value) {
-        addCookie(response, name, value, true, 30, TimeUnit.MINUTES);
+
+    public static void addCookie(HttpServletRequest request, HttpServletResponse response
+            , String name, String value) {
+        addCookie(request, response, name, value, true, 30, TimeUnit.MINUTES);
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value, boolean httpOnly
-            , int duration, TimeUnit timeUnit) {
+    public static void addCookie(HttpServletRequest request, HttpServletResponse response
+            , String name, String value, boolean httpOnly, int duration, TimeUnit timeUnit) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(httpOnly);
+        String path = request.getServletContext().getContextPath();
+        log.info(path);
+        cookie.setPath(path);
         cookie.setMaxAge((int) timeUnit.toMillis(duration));
         response.addCookie(cookie);
     }
@@ -29,9 +37,11 @@ public class CookieUtil {
 
     public static String getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (name.equals(cookie.getName())) {
-                return cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (name.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
             }
         }
         return null;

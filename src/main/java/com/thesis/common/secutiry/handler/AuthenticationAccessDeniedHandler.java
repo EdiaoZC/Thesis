@@ -34,7 +34,5 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
         PrintWriter writer = response.getWriter();
         writer.write(JSON.toJSONString(Response.builder().code(HttpServletResponse.SC_FORBIDDEN)
                 .msg(Error.ACCESS_DENIED).build()));
-        writer.flush();
-        writer.close();
     }
 }

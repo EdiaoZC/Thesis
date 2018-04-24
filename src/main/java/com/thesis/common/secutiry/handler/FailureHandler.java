@@ -32,7 +32,5 @@ public class FailureHandler implements AuthenticationFailureHandler {
         if (exception instanceof InternalAuthenticationServiceException) {
             writer.write(JSON.toJSONString(Response.builder().msg(exception.getMessage()).build()));
         }
-        writer.flush();
-        writer.close();
     }
 }

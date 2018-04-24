@@ -53,7 +53,8 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
             tokenService.saveToken(token, user);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             if (Agent.WEB.equals(agent)) {
-                CookieUtil.addCookie(response, security.getToken(), token, true, 30, TimeUnit.MINUTES);
+                log.debug("将token写入cookie");
+                CookieUtil.addCookie(request, response, security.getToken(), token, true, 30, TimeUnit.MINUTES);
             } else {
                 UserVo userVo = new UserVo();
                 BeanUtils.copyProperties(user, userVo);
@@ -61,7 +62,5 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
                 writer.write(JSON.toJSONString(userVo));
             }
         }
-        writer.flush();
-        writer.close();
     }
 }

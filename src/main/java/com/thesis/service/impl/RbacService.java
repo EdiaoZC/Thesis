@@ -1,7 +1,9 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.holder.TokenHolder;
 import com.thesis.service.PermissionService;
 import com.thesis.service.RoleService;
+import com.thesis.service.TokenService;
 import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
@@ -16,6 +18,7 @@ import org.springframework.util.PathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @Author: ZcEdiaos
@@ -31,11 +34,25 @@ public class RbacService {
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private TokenService tokenService;
+
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
         Object principal = auth.getPrincipal();
         log.debug(principal.getClass().getName());
+        String username = null;
         if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
+        }
+        try {
+            String token = TokenHolder.get();
+            if (token != null) {
+                username = tokenService.getUserInfoFromToken(token).getUsername();
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (username != null) {
             Set<String> urls = getUrlsByUserName(username);
             log.debug("url对象是:{}", urls);
             if (urls == null) {

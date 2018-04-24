@@ -1,5 +1,6 @@
 package com.thesis.config;
 
+import com.thesis.common.secutiry.filter.TokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 /**
@@ -31,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler failureHandler;
     @Autowired
     private AuthenticationSuccessHandler successHandler;
+    @Autowired
+    private TokenFilter tokenFilter;
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
@@ -42,12 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/webjars/**",
             "/authentication/require",
-            "/*.html",
+            "/login.html",
             "/assert/**"
             // other public endpoints of your API may be appended to this array
     };
 
-    @Value("${jwt.loginUrl}")
+    @Value("${loginUrl}")
     private String loginUrl;
 
     @Override
@@ -61,8 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest().access("@rbacService.hasPermission(request, authentication)")
-                .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-        http.headers().cacheControl();
+                .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler)
+                .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

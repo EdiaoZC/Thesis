@@ -21,7 +21,7 @@ public class SecurityProperties {
 
     private UserDetails user = new User("null", "null", AuthorityUtils.NO_AUTHORITIES);
 
-    @Value("${loginProccessUrl}")
+    @Value("${loginUrl}")
     private String loginUrl;
 
 }
