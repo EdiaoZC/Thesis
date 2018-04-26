@@ -1,6 +1,5 @@
 package com.thesis.service;
 
-import com.thesis.common.model.Vo.UserVo;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.concurrent.ExecutionException;

@@ -1,6 +1,6 @@
 package com.thesis.service;
 
-import com.thesis.common.exception.UsernameRepeatException;
+import com.thesis.common.exception.RegisterException;
 import com.thesis.common.model.User;
 
 /**
@@ -15,9 +15,9 @@ public interface AuthService {
      * 用户注册功能
      * @param user 用户
      * @return 成功后返回用户信息，失败后返回空
-     * @throws UsernameRepeatException
+     * @throws RegisterException
      */
-    User register(User user) throws UsernameRepeatException;
+    User register(User user) throws RegisterException;
 
     /**
      * 用户登录功能

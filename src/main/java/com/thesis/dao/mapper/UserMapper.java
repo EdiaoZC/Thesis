@@ -2,6 +2,8 @@ package com.thesis.dao.mapper;
 
 import com.thesis.common.model.User;
 
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -16,4 +18,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectByUsername(String username);
+
+    List<User> getAllInfo();
 }

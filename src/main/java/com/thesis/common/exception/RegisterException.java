@@ -5,13 +5,14 @@ package com.thesis.common.exception;
  * @Date: 2018/4/12 15:22
  * @Description:
  */
-public class UsernameRepeatException extends RuntimeException {
+public class RegisterException extends RuntimeException {
 
 
-    public UsernameRepeatException() {
+
+    public RegisterException() {
     }
 
-    public UsernameRepeatException(String message) {
+    public RegisterException(String message) {
         super(message);
     }
 }

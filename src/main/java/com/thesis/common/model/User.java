@@ -22,7 +22,7 @@ public class User {
 
     private String nickname;
 
-    private String sex;
+    private SexEnum sex;
 
     private Byte status;
 

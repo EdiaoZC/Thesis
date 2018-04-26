@@ -12,6 +12,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
+    <sql id="baseColumn">
+        id,username,nickName,sex,status,create_time
+    </sql>
+
     <sql id="Base_Column_List">
     id, username, password, salt, nickname, sex, status, create_time, update_time
   </sql>
@@ -24,6 +29,11 @@
     <select id="selectByUsername" resultType="com.thesis.common.model.User">
       SELECT id,username, password, salt,status from USER
       WHERE username = #{username}
+    </select>
+    <select id="getAllInfo" resultType="com.thesis.common.model.User">
+        select
+        <include refid="baseColumn"/>
+        from user
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user

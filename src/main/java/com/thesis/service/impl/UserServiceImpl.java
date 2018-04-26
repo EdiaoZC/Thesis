@@ -1,15 +1,21 @@
 package com.thesis.service.impl;
 
-import com.thesis.common.holder.SaltHolder;
+import com.thesis.common.constants.Error;
+import com.thesis.common.exception.RegisterException;
 import com.thesis.common.model.User;
+import com.thesis.common.model.form.UserForm;
+import com.thesis.common.model.vo.UserVo;
+import com.thesis.common.util.Md5Util;
 import com.thesis.dao.mapper.UserMapper;
 import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,15 +36,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int insertUser(User user) {
-        user.setSalt(SaltHolder.getSalt());
-        SaltHolder.remove();
+    @Transactional(rollbackFor = Exception.class)
+    public int register(UserForm userForm) throws RegisterException {
+        String salt = Md5Util.gensalt(6);
+        User user = new User();
+        if (!userForm.getPassword().equals(userForm.getConfirmPassword())) {
+            throw new RegisterException(Error.PASSWORD_ERROR);
+        }
+        BeanUtils.copyProperties(userForm, user);
+        user.setSalt(salt);
+        user.setPassword(Md5Util.getMD5AndSalt(userForm.getPassword(), salt));
+        log.debug("user对象是:{}", user);
         return userMapper.insertSelective(user);
     }
 
+    @Override
+    public List<UserVo> userList() {
+        List<User> users = userMapper.getAllInfo();
+        List<UserVo> userVos = new ArrayList<>();
+        for (User user : users) {
+            UserVo userVo = new UserVo();
+            BeanUtils.copyProperties(user, userVo);
+            userVo.setSex(user.getSex().getSex());
+            log.info("userVo对象是：{}", userVo);
+            userVos.add(userVo);
+        }
+        return userVos;
+    }
 
+    @Override
+    public boolean delUserById(Long id) {
+        return userMapper.deleteByPrimaryKey(id) == 1;
+    }
 
+    @Override
+    public boolean updateUserById(UserForm userForm) {
+        User user = new User();
+        BeanUtils.copyProperties(userForm, user);
+        return userMapper.updateByPrimaryKeySelective(user) == 1;
+    }
 
+    @Override
+    public User getInfoById(Long id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
 
 
 }
