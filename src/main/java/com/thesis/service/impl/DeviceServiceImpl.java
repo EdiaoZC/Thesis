@@ -1,5 +1,6 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.constants.App;
 import com.thesis.common.exception.RequestAlreadyException;
 import com.thesis.common.exception.TimeoutException;
 import com.thesis.common.model.DeferResult;
@@ -8,10 +9,12 @@ import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.dao.mapper.DeviceMapper;
 import com.thesis.service.DeviceService;
+import com.thesis.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.concurrent.locks.Condition;
@@ -30,6 +33,8 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private DeviceMapper deviceMapper;
+    @Autowired
+    private WebSocketService webSocketService;
 
 
     private ConcurrentHashMap<String, DeferResult<RunningParam>> deferredHolder;
@@ -59,10 +64,10 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public RunningParam requestDevice(String token) throws TimeoutException {
-        log.info("请求正在处理中");
+        log.debug("请求正在处理中");
         DeferResult<RunningParam> deferResult = new DeferResult<>();
-        log.info("deferredHolder是" + ":" + deferredHolder);
         deferredHolder.put(token, deferResult);
+        webSocketService.sendMessage(token);
         try {
             lock.lock();
             while (deferResult.status != DeferResult.COMPLETE) {
@@ -73,7 +78,7 @@ public class DeviceServiceImpl implements DeviceService {
         } finally {
             lock.unlock();
         }
-        log.info("请求处理完毕");
+        log.debug("请求处理完毕");
         return (RunningParam) deferResult.getResult();
     }
 

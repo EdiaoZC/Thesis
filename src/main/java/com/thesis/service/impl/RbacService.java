@@ -58,9 +58,10 @@ public class RbacService {
             if (urls == null) {
                 throw new AuthorizationServiceException("你没有相应权限，请联系系统管理员！");
             }
+            String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
             for (String url : urls) {
-                log.debug(url + "========" + request.getRequestURI());
-                if (pathMatcher.match(url, request.getRequestURI())) {
+                log.debug(url + "========" + path);
+                if (pathMatcher.match(url, path)) {
                     log.debug("成功通过校验");
                     return true;
                 }

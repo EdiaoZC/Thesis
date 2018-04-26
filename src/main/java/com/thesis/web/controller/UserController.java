@@ -2,7 +2,7 @@ package com.thesis.web.controller;
 
 import com.thesis.common.holder.SaltHolder;
 import com.thesis.common.model.User;
-import com.thesis.common.secutiry.Md5PassEncoder;
+import com.thesis.common.security.Md5PassEncoder;
 import com.thesis.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,10 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 /**

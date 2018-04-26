@@ -1,15 +1,15 @@
 package com.thesis.config;
 
-import com.thesis.common.secutiry.filter.TokenFilter;
+import com.thesis.common.security.filter.TokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -47,7 +47,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/authentication/require",
             "/login.html",
-            "/assert/**"
+            "/chat",
+            "/",
+            "/index",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/layui/**",
+            "/json/**",
+            "/*.html",
+            "/main"
             // other public endpoints of your API may be appended to this array
     };
 
@@ -61,8 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl(loginUrl)
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
-                .and()
-                .authorizeRequests()
+                .and().headers().frameOptions().sameOrigin() //允许同源网站加载frame
+                .and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest().access("@rbacService.hasPermission(request, authentication)")
                 .and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler)

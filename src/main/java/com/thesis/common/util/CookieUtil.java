@@ -1,6 +1,7 @@
 package com.thesis.common.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 public class CookieUtil {
 
 
-
     public static void addCookie(HttpServletRequest request, HttpServletResponse response
             , String name, String value) {
         addCookie(request, response, name, value, true, 30, TimeUnit.MINUTES);
@@ -27,8 +27,11 @@ public class CookieUtil {
             , String name, String value, boolean httpOnly, int duration, TimeUnit timeUnit) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(httpOnly);
-        String path = request.getServletContext().getContextPath();
-        log.info(path);
+        String path = request.getContextPath();
+        if (!StringUtils.isNoneBlank(path)) {
+            path = "/";
+        }
+        log.debug("cookie的路径是:{}", path);
         cookie.setPath(path);
         cookie.setMaxAge((int) timeUnit.toMillis(duration));
         response.addCookie(cookie);

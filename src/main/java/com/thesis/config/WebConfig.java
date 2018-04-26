@@ -3,36 +3,34 @@ package com.thesis.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.thesis.common.webSocket.WebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import java.util.List;
 
+/**
+ * @Author: ZcEdiaos
+ * @Date: 2018/4/8 11:42
+ * @Description:
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.thesis.web")
 @Import(SwaggerConfig.class)
-public class WebConfig extends WebMvcConfigurerAdapter {
+@EnableWebSocket
+@ImportResource("classpath:spring/applicationContext-mvc.xml")
+public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
 
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/view");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
+    @Autowired
+    private WebSocketHandler socketHandler;
+
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -51,7 +49,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/assert/**").addResourceLocations("/assert/");
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(socketHandler, "/chat");
     }
 }

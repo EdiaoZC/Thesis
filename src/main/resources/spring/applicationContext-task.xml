@@ -9,7 +9,7 @@
     <task:annotation-driven/>
 
 
-    <task:executor id="executor" rejection-policy="ABORT" pool-size="${corePoolSize}-${maxPoolSize}"
+    <task:executor id="executor" rejection-policy="CALLER_RUNS" pool-size="${corePoolSize}-${maxPoolSize}"
                    queue-capacity="${queueCapacity}"/>
 
 </beans>
