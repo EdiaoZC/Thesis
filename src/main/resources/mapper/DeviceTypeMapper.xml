@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.thesis.common.model.DeviceType">
         <id column="id" jdbcType="TINYINT" property="id"/>
         <result column="equipment_name" jdbcType="VARCHAR" property="equipmentName"/>
+        <result column="running_param" property="runningParam" jdbcType="VARCHAR"/>
         <result column="pid" jdbcType="TINYINT" property="pid"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>

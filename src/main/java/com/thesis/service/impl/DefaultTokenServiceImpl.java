@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import com.thesis.common.constants.SecurityProperties;
 import com.thesis.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +46,14 @@ public class DefaultTokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void refreshToken(String token) {
-        tokenCache.refresh(token);
+    public void refreshToken(String token, byte status) throws ExecutionException {
+        UserDetails user = tokenCache.get(token);
+        boolean enabled = (status & 8) != 8;
+        boolean accountNonExpired = (status & 4) != 4;
+        boolean credentialsNonExpired = (status & 2) != 2;
+        boolean accountNonLocked = (status & 1) != 1;
+        tokenCache.put(token, new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired
+                , credentialsNonExpired, accountNonLocked, user.getAuthorities()));
     }
 
     @Override

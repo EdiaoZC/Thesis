@@ -15,7 +15,7 @@ layui.config({
         }
         return result;
     }
-    alert(oneValues())
+
     $(".id").val(oneValues());
     $.ajax({
         url: "/users/" + oneValues(),
@@ -28,7 +28,16 @@ layui.config({
             if (data.sex === 'Female') {
                 index = 1;
             }
-            document.getElementsByName("sex")[1].checked = true;
+            $('[name=sex]').eq(index).prop('checked', true);
+            if ((data.status & 8) == 8) {
+                console.log("禁用");
+                $("input[type='checkbox'][name='status'][value='8']").prop('checked', true);
+            }
+            if ((data.status & 1) == 1) {
+                console.log("锁定");
+                $("input[type='checkbox'][name='status'][value='1']").prop('checked', true);
+            }
+            form.render();
         }
     })
 

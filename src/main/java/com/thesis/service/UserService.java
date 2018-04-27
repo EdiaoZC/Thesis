@@ -53,7 +53,7 @@ public interface UserService {
      * @param user 用户信息
      * @return 是否更新成功
      */
-    boolean updateUserById(UserForm user);
+    boolean updateUserById(UserForm user, String token);
 
     /**
      * 更具用户 id 获取用户详细信息

@@ -209,6 +209,7 @@ layui.config({
             currData = usersData.concat().splice(curr * nums - nums, nums);
             if (currData.length != 0) {
                 for (var i = 0; i < currData.length; i++) {
+
                     dataHtml += '<tr>'
                         + '<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
                         + '<td>' + currData[i].username + '</td>'

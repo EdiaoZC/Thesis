@@ -1,20 +1,22 @@
 package com.thesis.service.impl;
 
-import com.thesis.common.constants.App;
 import com.thesis.common.exception.RequestAlreadyException;
 import com.thesis.common.exception.TimeoutException;
 import com.thesis.common.model.DeferResult;
 import com.thesis.common.model.Device;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
+import com.thesis.common.model.form.DeviceForm;
+import com.thesis.common.model.vo.DeviceVo;
 import com.thesis.dao.mapper.DeviceMapper;
 import com.thesis.service.DeviceService;
 import com.thesis.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.concurrent.locks.Condition;
@@ -52,14 +54,17 @@ public class DeviceServiceImpl implements DeviceService {
         fieldUpdater = AtomicIntegerFieldUpdater.newUpdater(DeferResult.class, "status");
     }
 
+
     @Override
-    public int addDevice(Device device) {
-        return deviceMapper.insertSelective(device);
+    public boolean addDevice(DeviceForm deviceForm) {
+        Device device = new Device();
+        BeanUtils.copyProperties(deviceForm, device);
+        return deviceMapper.insert(device) == 1;
     }
 
     @Override
-    public int delDevice(Short deviceId) {
-        return deviceMapper.deleteByPrimaryKey(deviceId);
+    public boolean delDevice(Short deviceId) {
+        return deviceMapper.deleteByPrimaryKey(deviceId) == 1;
     }
 
     @Override
@@ -99,6 +104,25 @@ public class DeviceServiceImpl implements DeviceService {
         } else {
             throw new RequestAlreadyException();
         }
+    }
+
+    @Override
+    public boolean updateInfo(DeviceForm deviceForm) {
+        Device device = new Device();
+        BeanUtils.copyProperties(deviceForm, device);
+        return deviceMapper.updateByPrimaryKeySelective(device) == 1;
+    }
+
+    @Override
+    public List<DeviceVo> deviceList() {
+        List<DeviceVo> devices = deviceMapper.getAllInfo();
+        return devices;
+    }
+
+    @Override
+    public Device getInfo(Short deviceId) {
+        Device device = deviceMapper.selectByPrimaryKey(deviceId);
+        return device;
     }
 
 }

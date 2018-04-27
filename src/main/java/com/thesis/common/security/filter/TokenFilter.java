@@ -51,7 +51,6 @@ public class TokenFilter extends OncePerRequestFilter {
             token = request.getParameter(security.getToken());
         }
         TokenHolder.set(token);
-        log.debug("token是:{}", token);
         if (token != null) {
             try {
                 if (!tokenService.isValidToken(token)) {

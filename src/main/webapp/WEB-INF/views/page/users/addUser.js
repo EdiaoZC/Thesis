@@ -4,7 +4,6 @@ layui.config({
 }).use(['form', 'layer', 'jquery'], function () {
     var form = layui.form(),
         layer = parent.layer === undefined ? layui.layer : parent.layer,
-        laypage = layui.laypage;
     $ = layui.jquery;
     form.on("submit(addUser)", function (data) {
         var formdata = $(".layui-form").serialize();
@@ -20,7 +19,7 @@ layui.config({
                     layer.closeAll("iframe");
                     //刷新父页面
                     parent.location.reload();
-                }, 2000);
+                }, 500);
             },
             error: function () {
                 top.layer.msg("失败！");

@@ -34,10 +34,11 @@ public interface TokenService {
      *
      * @param token
      */
-    void refreshToken(String token);
+    void refreshToken(String token, byte status) throws ExecutionException;
 
     /**
      * 存储 token
+     *
      * @param token
      * @param userDetails
      */

@@ -4,6 +4,7 @@ import com.thesis.common.model.SexEnum;
 import lombok.*;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 /**
  * @Author: ZcEdiaos
@@ -33,4 +34,6 @@ public class UserForm {
     private String confirmPassword;
 
     private SexEnum sex;
+
+    private List<Byte> status;
 }

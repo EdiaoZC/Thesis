@@ -3,6 +3,7 @@ package com.thesis.common.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.thesis.common.constants.Agent;
 import com.thesis.common.constants.SecurityProperties;
+import com.thesis.common.model.Response;
 import com.thesis.common.model.vo.UserVo;
 import com.thesis.common.util.CookieUtil;
 import com.thesis.service.TokenService;
@@ -17,6 +18,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +63,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
             if (Agent.WEB.equals(agent)) {
                 log.debug("将token写入cookie");
                 CookieUtil.addCookie(request, response, security.getToken(), token, true, 30, TimeUnit.MINUTES);
-                redirectStrategy.sendRedirect(request, response, successUrl);
+                writer.write(JSON.toJSONString(Response.builder().code(200).data(successUrl).build()));
             } else {
                 UserVo userVo = new UserVo();
                 BeanUtils.copyProperties(user, userVo);

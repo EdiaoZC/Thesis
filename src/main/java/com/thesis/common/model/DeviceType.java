@@ -16,6 +16,8 @@ public class DeviceType {
 
     private String equipmentName;
 
+    private String runningParam;
+
     private Byte pid;
 
     private Date createTime;

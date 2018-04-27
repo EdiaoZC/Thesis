@@ -1,15 +1,22 @@
 package com.thesis.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.thesis.common.model.Device;
+import com.thesis.common.model.form.DeviceForm;
+import com.thesis.common.model.vo.DeviceVo;
 import com.thesis.service.DeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.ResolutionSyntax;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,34 +38,60 @@ public class DeviceController {
 
 
     @ApiOperation("设备列表")
-    @GetMapping("/{id:\\d+}")
-    public ResponseEntity<String> deviceList(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok("设备列表");
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<DeviceVo>> deviceList() {
+        List<DeviceVo> devices = deviceService.deviceList();
+        if (devices != null && devices.size() > 0) {
+            return ResponseEntity.ok(devices);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @ApiOperation("查看设备信息")
-    @GetMapping
-    public ResponseEntity<String> deviceInfo() {
-        return ResponseEntity.ok("查看设备信息");
+    @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Device> deviceInfo(@PathVariable("id") Short id) {
+        Device device = deviceService.getInfo(id);
+        if (device != null) {
+            return ResponseEntity.ok(device);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
     }
 
 
     @ApiOperation("添加设备")
-    @PostMapping
-    public ResponseEntity<String> addDevice(@Valid Device device, Errors errors) {
-        return ResponseEntity.ok("添加设备");
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> addDevice(@Valid DeviceForm device, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(JSON.toJSONString(new ArrayList<>(errors.getFieldErrors())));
+        }
+        if (deviceService.addDevice(device)) {
+            return ResponseEntity.ok("success");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
     }
 
     @ApiOperation("更新设备信息")
     @PutMapping
-    public ResponseEntity<String> updateDeviceInfo() {
-        return ResponseEntity.ok("更新设备信息");
+    public ResponseEntity<String> updateDeviceInfo(@Valid DeviceForm device, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(JSON.toJSONString(new ArrayList<>(errors.getFieldErrors())));
+        }
+        if (deviceService.updateInfo(device)) {
+            return ResponseEntity.ok("success");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
     }
 
 
     @ApiOperation("删除设备")
-    @DeleteMapping
-    public ResponseEntity<String> delDevice() {
-        return ResponseEntity.ok("删除设备");
+    @DeleteMapping(value = "/{id:\\d+}")
+    public ResponseEntity<String> delDevice(@PathVariable("id") Short id) {
+        if (deviceService.delDevice(id)) {
+            return ResponseEntity.ok("success");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
     }
 }

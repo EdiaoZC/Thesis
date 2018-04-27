@@ -28,11 +28,12 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response
             , AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        log.error("发生异常{}", accessDeniedException.getMessage());
+        log.debug("发生异常{}", accessDeniedException.getMessage());
         PrintWriter writer = response.getWriter();
         writer.write(JSON.toJSONString(Response.builder().code(HttpServletResponse.SC_FORBIDDEN)
                 .msg(Error.ACCESS_DENIED).build()));
+        writer.flush();
+        writer.close();
     }
 }

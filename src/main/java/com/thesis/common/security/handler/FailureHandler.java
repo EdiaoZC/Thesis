@@ -3,6 +3,7 @@ package com.thesis.common.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.thesis.common.model.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -27,9 +28,11 @@ public class FailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response
             , AuthenticationException exception) throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter writer = response.getWriter();
-        if (exception instanceof InternalAuthenticationServiceException) {
+        log.info("登陆失败");
+        if (exception instanceof Exception) {
             writer.write(JSON.toJSONString(Response.builder().msg(exception.getMessage()).build()));
         }
     }

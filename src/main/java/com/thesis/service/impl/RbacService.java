@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,29 +42,39 @@ public class RbacService {
         Object principal = auth.getPrincipal();
         log.debug(principal.getClass().getName());
         String username = null;
+        UserDetails user = null;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
+            user = (UserDetails) principal;
         }
         try {
             String token = TokenHolder.get();
             if (token != null) {
-                username = tokenService.getUserInfoFromToken(token).getUsername();
+                user = tokenService.getUserInfoFromToken(token);
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        if (username != null) {
-            Set<String> urls = getUrlsByUserName(username);
-            log.debug("url对象是:{}", urls);
-            if (urls == null) {
-                throw new AuthorizationServiceException("你没有相应权限，请联系系统管理员！");
+        if (user != null) {
+            if (!user.isEnabled()) {
+                throw new RuntimeException("账号被禁用");
             }
-            String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
-            for (String url : urls) {
-                log.debug(url + "========" + path);
-                if (pathMatcher.match(url, path)) {
-                    log.debug("成功通过校验");
-                    return true;
+            if (!user.isAccountNonLocked()) {
+                throw new RuntimeException("账号被锁定");
+            }
+            username = user.getUsername();
+            if (username != null) {
+                Set<String> urls = getUrlsByUserName(username);
+                log.debug("url对象是:{}", urls);
+                if (urls == null) {
+                    throw new AuthorizationServiceException("你没有相应权限，请联系系统管理员！");
+                }
+                String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
+                for (String url : urls) {
+                    log.debug(url + "========" + path);
+                    if (pathMatcher.match(url, path)) {
+                        log.debug("成功通过校验");
+                        return true;
+                    }
                 }
             }
         }
