@@ -59,7 +59,9 @@ public class DeviceServiceImpl implements DeviceService {
     public boolean addDevice(DeviceForm deviceForm) {
         Device device = new Device();
         BeanUtils.copyProperties(deviceForm, device);
-        return deviceMapper.insert(device) == 1;
+        device.setEquipmentType(deviceForm.getDeviceType());
+        log.debug("device对象是:{}", device);
+        return deviceMapper.insertSelective(device) == 1;
     }
 
     @Override
@@ -110,6 +112,8 @@ public class DeviceServiceImpl implements DeviceService {
     public boolean updateInfo(DeviceForm deviceForm) {
         Device device = new Device();
         BeanUtils.copyProperties(deviceForm, device);
+        device.setEquipmentType(deviceForm.getDeviceType());
+        device.setEquipmentState(deviceForm.getStatus());
         return deviceMapper.updateByPrimaryKeySelective(device) == 1;
     }
 

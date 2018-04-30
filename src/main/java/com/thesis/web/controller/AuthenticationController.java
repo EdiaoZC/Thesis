@@ -1,14 +1,24 @@
 package com.thesis.web.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.thesis.common.constants.Agent;
+import com.thesis.common.holder.PasswordHolder;
+import com.thesis.common.model.Response;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -19,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @Author: ZcEdiaos
@@ -58,8 +69,23 @@ public class AuthenticationController {
 
     @ApiOperation("用户登陆")
     @PostMapping(value = "/user/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> login(String username, String password) {
-        return ResponseEntity.ok("hello");
+    public void login(String username, String password) {
+
+    }
+
+    @GetMapping(value = "/user/logout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String agent = request.getHeader(Agent.AGENT);
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        if (Agent.WEB.equals(agent)) {
+            return "redirect:/authentication/require";
+        } else {
+            return JSON.toJSONString(Response.builder().code(200).msg("success").build());
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.thesis.common.model;
 
+import com.alibaba.fastjson.annotation.JSONType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
+@JSONType()
 public enum DeviceStatus {
 
     NORMAL("正常"), RUNNING("使用中"), BROKNE("故障");

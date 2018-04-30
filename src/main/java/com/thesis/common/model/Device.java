@@ -14,6 +14,8 @@ import java.util.Date;
 public class Device {
     private Short id;
 
+    private String deviceId;
+
     private Byte equipmentType;
 
     private Byte equipmentState;
@@ -22,5 +24,5 @@ public class Device {
 
     private Date updateTime;
 
-   
+
 }

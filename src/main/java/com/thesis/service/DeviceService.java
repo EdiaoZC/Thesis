@@ -59,6 +59,7 @@ public interface DeviceService {
      * 更改设备信息
      *
      * @param device 设备参数
+     * @return 是否成功
      */
     boolean updateInfo(DeviceForm device);
 

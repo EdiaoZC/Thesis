@@ -17,10 +17,15 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class DeviceVo {
 
+
+    /**
+     * 主键
+     */
+    private Short id;
     /**
      * 设备编号
      */
-    private Short id;
+    private String deviceId;
 
     /**
      * 设备类型

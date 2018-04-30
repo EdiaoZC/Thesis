@@ -1,7 +1,9 @@
 package com.thesis.common.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 /**
@@ -11,12 +13,17 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
+@EqualsAndHashCode
 public class RunningParam {
 
     /**
      * 设备运行时所需参数,格式为json
      */
-    private String data;
-
+    private String key;
+    /**
+     * 设备运行时所需参数,格式为json
+     */
+    private String value;
 
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thesis.dao.mapper.TrainingResultMapper">
+    <resultMap id="BaseResultMap" type="com.thesis.common.model.TrainingResult">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="patient_id" jdbcType="BIGINT" property="patientId"/>
+        <result column="equipment_type" jdbcType="TINYINT" property="equipmentType"/>
+        <result column="actual_param" jdbcType="VARCHAR" property="actualParam"/>
+        <result column="training_time" jdbcType="TIMESTAMP" property="trainingTime"/>
+        <result column="training_result" jdbcType="CHAR" property="trainingResult"/>
+        <result column="training_score" jdbcType="TINYINT" property="trainingScore"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, patient_id, equipment_type, actual_param, training_time, training_result, training_score
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from training_result
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from training_result
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.thesis.common.model.TrainingResult">
+    insert into training_result (id, patient_id, equipment_type,
+      actual_param, training_time, training_result,
+      training_score)
+    values (#{id,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, #{equipmentType,jdbcType=TINYINT},
+      #{actualParam,jdbcType=VARCHAR}, #{trainingTime,jdbcType=TIMESTAMP}, #{trainingResult,jdbcType=CHAR},
+      #{trainingScore,jdbcType=TINYINT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.thesis.common.model.TrainingResult">
+        insert into training_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="patientId != null">
+                patient_id,
+            </if>
+            <if test="equipmentType != null">
+                equipment_type,
+            </if>
+            <if test="actualParam != null">
+                actual_param,
+            </if>
+            <if test="trainingTime != null">
+                training_time,
+            </if>
+            <if test="trainingResult != null">
+                training_result,
+            </if>
+            <if test="trainingScore != null">
+                training_score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="patientId != null">
+                #{patientId,jdbcType=BIGINT},
+            </if>
+            <if test="equipmentType != null">
+                #{equipmentType,jdbcType=TINYINT},
+            </if>
+            <if test="actualParam != null">
+                #{actualParam,jdbcType=VARCHAR},
+            </if>
+            <if test="trainingTime != null">
+                #{trainingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="trainingResult != null">
+                #{trainingResult,jdbcType=CHAR},
+            </if>
+            <if test="trainingScore != null">
+                #{trainingScore,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.thesis.common.model.TrainingResult">
+        update training_result
+        <set>
+            <if test="patientId != null">
+                patient_id = #{patientId,jdbcType=BIGINT},
+            </if>
+            <if test="equipmentType != null">
+                equipment_type = #{equipmentType,jdbcType=TINYINT},
+            </if>
+            <if test="actualParam != null">
+                actual_param = #{actualParam,jdbcType=VARCHAR},
+            </if>
+            <if test="trainingTime != null">
+                training_time = #{trainingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="trainingResult != null">
+                training_result = #{trainingResult,jdbcType=CHAR},
+            </if>
+            <if test="trainingScore != null">
+                training_score = #{trainingScore,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.thesis.common.model.TrainingResult">
+    update training_result
+    set patient_id = #{patientId,jdbcType=BIGINT},
+      equipment_type = #{equipmentType,jdbcType=TINYINT},
+      actual_param = #{actualParam,jdbcType=VARCHAR},
+      training_time = #{trainingTime,jdbcType=TIMESTAMP},
+      training_result = #{trainingResult,jdbcType=CHAR},
+      training_score = #{trainingScore,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

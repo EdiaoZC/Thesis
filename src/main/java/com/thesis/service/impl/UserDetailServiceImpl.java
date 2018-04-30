@@ -1,5 +1,6 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.holder.PasswordHolder;
 import com.thesis.common.holder.SaltHolder;
 import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         boolean accountNonExpired = (status & 4) != 4;
         boolean credentialsNonExpired = (status & 2) != 2;
         boolean accountNonLocked = (status & 1) != 1;
+        PasswordHolder.setPassword(user.getPassword());
         return new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired
                 , credentialsNonExpired, accountNonLocked, AuthorityUtils.NO_AUTHORITIES);
     }

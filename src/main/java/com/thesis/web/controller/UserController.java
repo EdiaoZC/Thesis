@@ -2,12 +2,9 @@ package com.thesis.web.controller;
 
 import com.thesis.common.constants.Error;
 import com.thesis.common.constants.SecurityProperties;
-import com.thesis.common.holder.SaltHolder;
-import com.thesis.common.model.Response;
 import com.thesis.common.model.User;
 import com.thesis.common.model.form.UserForm;
 import com.thesis.common.model.vo.UserVo;
-import com.thesis.common.util.CookieUtil;
 import com.thesis.common.util.RequestUtil;
 import com.thesis.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Security;
 import java.util.List;
 
 
@@ -41,6 +37,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private SecurityProperties security;
+    @Autowired
+    private HttpServletRequest request;
 
 
     @ApiOperation("注册用户")
@@ -88,9 +86,9 @@ public class UserController {
 
     @ApiOperation("更新用户")
     @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> userUpdateInfo(@Valid UserForm user, HttpServletRequest request, Errors errors) {
+    public ResponseEntity<String> userUpdateInfo(@Valid UserForm user, Errors errors) {
         String token = RequestUtil.getValue(request, security.getToken());
-        log.info("user对象是:{}", user);
+        log.info("token是多少:{}", token);
         if (errors.hasErrors()) {
 
         }

@@ -1,9 +1,6 @@
 package com.thesis.common.model.form;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @Author: ZcEdiaos
@@ -13,9 +10,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
+@EqualsAndHashCode
 public class DeviceForm {
 
+
+    /**
+     * 主键
+     */
+    private Short id;
 
     /**
      * 设备编号
@@ -24,6 +26,11 @@ public class DeviceForm {
     /**
      * 设备类型
      */
-    private String equipment_type;
+    private Byte deviceType;
+
+    /**
+     * 设备状态
+     */
+    private Byte status;
 
 }

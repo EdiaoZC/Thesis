@@ -1,5 +1,11 @@
 [
   {
+    "title": "设备类型",
+    "icon": "icon-text",
+    "href": "page/deviceType/deviceList.html",
+    "spread": false
+  },
+  {
     "title": "设备列表",
     "icon": "icon-text",
     "href": "page/devices/deviceList.html",

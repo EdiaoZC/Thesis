@@ -41,10 +41,7 @@ public class DeviceController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<DeviceVo>> deviceList() {
         List<DeviceVo> devices = deviceService.deviceList();
-        if (devices != null && devices.size() > 0) {
-            return ResponseEntity.ok(devices);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        return ResponseEntity.ok(devices);
     }
 
     @ApiOperation("查看设备信息")

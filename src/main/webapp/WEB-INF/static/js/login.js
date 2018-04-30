@@ -8,20 +8,22 @@ layui.config({
     //登录按钮事件
     form.on("submit(login)", function (data) {
         var formdata = $('.layui-form').serialize();
-        alert(formdata)
         $.ajax({
             url: "/user/login",
             data: formdata,
             type: "POST",
             async: true,
-            success: function (returnData) {
-                window.location.href = returnData.data;
+            success: function (data) {
+                window.location.href = data.data;
+                return false;
             },
-            error: function (returnData) {
-                layer.alert(returnData.msg);
-                return true;
+            error: function (response, data) {
+                if (response.status == 401) {
+                    layer.alert("登陆失败");
+                }
             }
-        })
+        });
+
         return false;
     })
 })

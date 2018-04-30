@@ -1,8 +1,10 @@
 package com.thesis.config;
 
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.thesis.common.model.DeviceStatus;
 import com.thesis.common.webSocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -39,8 +41,15 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        fastJsonConfig.setSerializeConfig(serializeConfig());
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         converters.add(fastJsonHttpMessageConverter);
+    }
+
+    private SerializeConfig serializeConfig() {
+        SerializeConfig serializeConfig = new SerializeConfig();
+        serializeConfig.configEnumAsJavaBean(DeviceStatus.class);
+        return serializeConfig;
     }
 
     @Override

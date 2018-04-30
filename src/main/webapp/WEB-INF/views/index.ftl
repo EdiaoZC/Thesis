@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layui后台管理模板</title>
+    <title>智能康复设备管理系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -23,33 +23,6 @@
             <a href="#" class="logo">layui后台管理</a>
             <!-- 显示/隐藏菜单 -->
             <a href="javascript:;" class="iconfont hideMenu icon-menu1"></a>
-            <!-- 搜索 -->
-            <div class="layui-form component">
-                <select name="modules" lay-verify="required" lay-search="">
-                    <option value="">直接选择或搜索选择</option>
-                    <option value="1">layer</option>
-                    <option value="2">form</option>
-                    <option value="3">layim</option>
-                    <option value="4">element</option>
-                    <option value="5">laytpl</option>
-                    <option value="6">upload</option>
-                    <option value="7">laydate</option>
-                    <option value="8">laypage</option>
-                    <option value="9">flow</option>
-                    <option value="10">util</option>
-                    <option value="11">code</option>
-                    <option value="12">tree</option>
-                    <option value="13">layedit</option>
-                    <option value="14">nav</option>
-                    <option value="15">tab</option>
-                    <option value="16">table</option>
-                    <option value="17">select</option>
-                    <option value="18">checkbox</option>
-                    <option value="19">switch</option>
-                    <option value="20">radio</option>
-                </select>
-                <i class="layui-icon">&#xe615;</i>
-            </div>
             <!-- 天气信息 -->
             <div class="weather" pc>
                 <div id="tp-weather-widget"></div>
@@ -99,7 +72,7 @@
                             class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>设置</cite></a>
                 </li>
                 <li class="layui-nav-item" mobile>
-                    <a href="page/login/login.html" class="signOut"><i class="iconfont icon-loginout"></i> 退出</a>
+                    <a href="/logout" class="signOut"><i class="iconfont icon-loginout"></i> 退出</a>
                 </li>
                 <li class="layui-nav-item lockcms" pc>
                     <a href="javascript:;"><i class="iconfont icon-lock1"></i><cite>锁屏</cite></a>
@@ -110,15 +83,15 @@
                         <cite>请叫我马哥</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu"
-                                                                                         data-icon="icon-zhanghu"></i><cite>个人资料</cite></a>
-                        </dd>
-                        <dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1"
-                                                                                          data-icon="icon-shezhi1"></i><cite>修改密码</cite></a>
-                        </dd>
-                        <dd><a href="javascript:;" class="changeSkin"><i
-                                class="iconfont icon-huanfu"></i><cite>更换皮肤</cite></a></dd>
-                        <dd><a href="page/login/login.html" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a>
+                        <#--<dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu"-->
+                                                                                         <#--data-icon="icon-zhanghu"></i><cite>个人资料</cite></a>-->
+                        <#--</dd>-->
+                        <#--<dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1"-->
+                                                                                          <#--data-icon="icon-shezhi1"></i><cite>修改密码</cite></a>-->
+                        <#--</dd>-->
+                        <#--<dd><a href="javascript:;" class="changeSkin"><i-->
+                                <#--class="iconfont icon-huanfu"></i><cite>更换皮肤</cite></a></dd>-->
+                        <dd><a href="/logout" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a>
                         </dd>
                     </dl>
                 </li>
@@ -161,7 +134,7 @@
     </div>
     <!-- 底部 -->
     <div class="layui-footer footer">
-        <p>copyright @2017 请叫我马哥　　<a onclick="donation()" class="layui-btn layui-btn-danger layui-btn-small">捐赠作者</a>
+        <p>
         </p>
     </div>
 </div>

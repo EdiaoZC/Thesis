@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserById(UserForm userForm, String token) {
         User user = new User();
+        log.info("token是多少:{}", token);
         BeanUtils.copyProperties(userForm, user);
         byte status = 0;
         if (userForm.getStatus() != null) {
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setStatus(status);
         try {
-            tokenService.refreshToken(token,status);
+            tokenService.refreshToken(token, status);
         } catch (ExecutionException e) {
             e.printStackTrace();
         }

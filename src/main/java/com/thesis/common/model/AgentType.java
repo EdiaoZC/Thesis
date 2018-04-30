@@ -7,9 +7,6 @@ package com.thesis.common.model;
  */
 public class AgentType {
 
-
-
-
     /**
      * 用户使用浏览器设备进行请求
      */

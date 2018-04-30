@@ -19,4 +19,6 @@ public interface DeviceMapper {
     int updateByPrimaryKey(Device record);
 
     List<DeviceVo> getAllInfo();
+
+    int getDeviceByType(Byte id);
 }

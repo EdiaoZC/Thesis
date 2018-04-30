@@ -3,6 +3,7 @@ package com.thesis.common.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.thesis.common.constants.Agent;
 import com.thesis.common.constants.SecurityProperties;
+import com.thesis.common.holder.PasswordHolder;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.vo.UserVo;
 import com.thesis.common.util.CookieUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -56,8 +58,11 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         PrintWriter writer = response.getWriter();
         String agent = request.getHeader(Agent.AGENT);
         if (details instanceof UserDetails) {
-            UserDetails user = (UserDetails) details;
             String token = UUID.randomUUID().toString();
+            UserDetails user = new User(((UserDetails) details).getUsername(), PasswordHolder.get()
+                    , ((UserDetails) details).isEnabled(), ((UserDetails) details).isAccountNonExpired()
+                    , ((UserDetails) details).isCredentialsNonExpired(), ((UserDetails) details).isAccountNonLocked()
+                    , ((UserDetails) details).getAuthorities());
             tokenService.saveToken(token, user);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             if (Agent.WEB.equals(agent)) {

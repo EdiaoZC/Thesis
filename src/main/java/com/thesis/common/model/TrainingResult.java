@@ -18,6 +18,8 @@ public class TrainingResult {
 
     private Byte equipmentType;
 
+    private String actualParam;
+
     private Date trainingTime;
 
     private String trainingResult;

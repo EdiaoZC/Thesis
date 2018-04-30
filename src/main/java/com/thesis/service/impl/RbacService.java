@@ -1,17 +1,13 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.exception.AccountException;
 import com.thesis.common.holder.TokenHolder;
 import com.thesis.service.PermissionService;
-import com.thesis.service.RoleService;
 import com.thesis.service.TokenService;
-import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
@@ -40,8 +36,6 @@ public class RbacService {
 
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
         Object principal = auth.getPrincipal();
-        log.debug(principal.getClass().getName());
-        String username = null;
         UserDetails user = null;
         if (principal instanceof UserDetails) {
             user = (UserDetails) principal;
@@ -56,12 +50,12 @@ public class RbacService {
         }
         if (user != null) {
             if (!user.isEnabled()) {
-                throw new RuntimeException("账号被禁用");
+                throw new AccountException("账号被禁用");
             }
             if (!user.isAccountNonLocked()) {
-                throw new RuntimeException("账号被锁定");
+                throw new AccountException("账号被锁定");
             }
-            username = user.getUsername();
+            String username = user.getUsername();
             if (username != null) {
                 Set<String> urls = getUrlsByUserName(username);
                 log.debug("url对象是:{}", urls);
