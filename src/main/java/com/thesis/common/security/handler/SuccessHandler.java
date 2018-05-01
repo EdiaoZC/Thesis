@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.thesis.common.constants.Agent;
 import com.thesis.common.constants.SecurityProperties;
 import com.thesis.common.holder.PasswordHolder;
+import com.thesis.common.model.DefaultUserDetails;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.vo.UserVo;
 import com.thesis.common.util.CookieUtil;
@@ -57,13 +58,13 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         Object details = authentication.getPrincipal();
         PrintWriter writer = response.getWriter();
         String agent = request.getHeader(Agent.AGENT);
-        if (details instanceof UserDetails) {
+        if (details instanceof DefaultUserDetails) {
             String token = UUID.randomUUID().toString();
-            UserDetails user = new User(((UserDetails) details).getUsername(), PasswordHolder.get()
+            UserDetails user = new DefaultUserDetails(((DefaultUserDetails) details).getId(), ((UserDetails) details).getUsername(), PasswordHolder.get()
                     , ((UserDetails) details).isEnabled(), ((UserDetails) details).isAccountNonExpired()
                     , ((UserDetails) details).isCredentialsNonExpired(), ((UserDetails) details).isAccountNonLocked()
                     , ((UserDetails) details).getAuthorities());
-            tokenService.saveToken(token, user);
+            tokenService.saveToken(token, ((DefaultUserDetails) details).getId(), user);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             if (Agent.WEB.equals(agent)) {
                 log.debug("将token写入cookie");

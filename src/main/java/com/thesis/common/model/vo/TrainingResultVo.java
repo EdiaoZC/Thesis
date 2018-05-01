@@ -22,23 +22,25 @@ public class TrainingResultVo {
     /**
      * 用户名
      */
-    private String username;
+    private String nickname;
 
     /**
      * 设备编号
      */
-    private String deviceId;
+    private String deviceType;
 
     /**
      * 实际运行参数
      */
-    private String actualParams;
+    private String actualParam;
 
     /**
      * 分数
      */
     private String score;
 
+
+    private String trainingResult;
     /**
      * 训练日期
      */

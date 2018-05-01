@@ -32,6 +32,11 @@ public class TrainingResultForm {
     private String actualParam;
 
     /**
+     * 训练结果
+     */
+    private String trainingResult;
+
+    /**
      * 评价
      */
     private String score;

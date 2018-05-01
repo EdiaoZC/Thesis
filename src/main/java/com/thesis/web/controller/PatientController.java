@@ -2,6 +2,7 @@ package com.thesis.web.controller;
 
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
+import com.thesis.common.model.form.DeviceRequestForm;
 import com.thesis.service.DeviceService;
 import com.thesis.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,11 @@ public class PatientController {
     private DeviceService deviceService;
 
     @RequestMapping(value = "/device", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Callable<ResponseEntity<RunningParam>> deviceRequest(String token) {
+    public Callable<ResponseEntity<RunningParam>> deviceRequest(String token, DeviceRequestForm form) {
         return new Callable<ResponseEntity<RunningParam>>() {
             @Override
             public ResponseEntity<RunningParam> call() throws Exception {
-                return ResponseEntity.ok(deviceService.requestDevice(token));
+                return ResponseEntity.ok(deviceService.requestDevice(token,form));
             }
         };
     }

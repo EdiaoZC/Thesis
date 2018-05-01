@@ -61,4 +61,9 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(socketHandler, "/chat");
     }
+
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        super.configureAsyncSupport(configurer);
+    }
 }

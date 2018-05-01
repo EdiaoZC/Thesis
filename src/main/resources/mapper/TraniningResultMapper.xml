@@ -19,6 +19,17 @@
         from training_result
         where id = #{id,jdbcType=BIGINT}
     </select>
+    <select id="getAllInfo" resultType="com.thesis.common.model.vo.TrainingResultVo">
+        select nickname,equipment_name as deviceType,actual_param,training_score as score,training_result,training_time
+        from
+        device_type as a join training_result as b join user as c on patient_id = c.id and equipment_type = a.id
+        <if test="username !=null">
+            and username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceId !=null">
+            and equipment_type = (select equiment_type from device where devcie_id = #{devicdId,jdbcType = VARCHAR} )
+        </if>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from training_result
     where id = #{id,jdbcType=BIGINT}

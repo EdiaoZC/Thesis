@@ -27,44 +27,55 @@ public class DefaultTokenServiceImpl implements TokenService {
 
     @Autowired
     private SecurityProperties security;
+//
+//    private LoadingCache<String, UserDetails> tokenCache = CacheBuilder.newBuilder()
+//            .maximumSize(10000)
+//            .expireAfterAccess(30, TimeUnit.MINUTES)
+//            .build(new CacheLoader<String, UserDetails>() {
+//                @Override
+//                public UserDetails load(String key) throws Exception {
+//                    return security.getUser();
+//                }
+//            });
 
-    private LoadingCache<String, UserDetails> tokenCache = CacheBuilder.newBuilder()
-            .maximumSize(10000)
-            .expireAfterAccess(30, TimeUnit.MINUTES)
-            .build(new CacheLoader<String, UserDetails>() {
-                @Override
-                public UserDetails load(String key) throws Exception {
-                    return security.getUser();
-                }
-            });
+    private ConcurrentHashMap<String, UserDetails> tokenCache = new ConcurrentHashMap<>();
 
-    private ConcurrentHashMap<Long, UserDetails> usermap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, String> userToken = new ConcurrentHashMap<>();
 
     @Override
     public UserDetails getUserInfoFromToken(String token) throws ExecutionException {
-        return tokenCache.get(token);
+        UserDetails user = tokenCache.get(token);
+        log.info("user对象是:{}", user);
+        return user;
     }
 
     @Override
     public boolean isValidToken(String token) throws ExecutionException {
-        return tokenCache.get(token) != security.getUser();
+        return tokenCache.get(token) != null;
     }
 
     @Override
-    public void refreshToken(String token, byte status) throws ExecutionException {
-        User user = (User) tokenCache.get(token);
-        boolean enabled = (status & 8) != 8;
-        boolean accountNonExpired = (status & 4) != 4;
-        boolean credentialsNonExpired = (status & 2) != 2;
-        boolean accountNonLocked = (status & 1) != 1;
-        log.info("user对象是:{}", user.getUsername());
-        log.info("user对象是:{}", user.getPassword());
-        tokenCache.put(token, new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired
-                , credentialsNonExpired, accountNonLocked, user.getAuthorities()));
+    public void refreshToken(com.thesis.common.model.User user) throws ExecutionException {
+        String token = userToken.get(user.getId());
+        if (token == null) {
+            return;
+        }
+        UserDetails details = tokenCache.get(token);
+        boolean enabled = (user.getStatus() & 8) != 8;
+        boolean accountNonExpired = (user.getStatus() & 4) != 4;
+        boolean credentialsNonExpired = (user.getStatus() & 2) != 2;
+        boolean accountNonLocked = (user.getStatus() & 1) != 1;
+        log.info("用户状态:{}-{}-{}-{}", enabled, accountNonExpired, credentialsNonExpired, accountNonLocked);
+        final User newUser = new User(user.getUsername(), details.getPassword(), enabled, accountNonExpired
+                , credentialsNonExpired, accountNonLocked, details.getAuthorities());
+        log.info("newUser对象是:{}", newUser);
+        tokenCache.put(token, newUser);
+//        tokenCache.refresh(token);
     }
 
     @Override
-    public void saveToken(String token, UserDetails userDetails) {
+    public void saveToken(String token, Long id, UserDetails userDetails) {
+        userToken.put(id, token);
         tokenCache.put(token, userDetails);
     }
 }

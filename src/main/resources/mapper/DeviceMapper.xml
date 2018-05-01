@@ -35,6 +35,10 @@
     <select id="getDeviceByType" resultType="java.lang.Integer">
         select  count(*) from device where equipment_type = #{id}
     </select>
+    <select id="getRunParamByDeviceId" resultType="java.lang.String">
+        select running_param  from device as a  join device_type as b on a.equipment_type =b.id
+        where device_id = #{deviceId,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
     delete from device
     where id = #{id,jdbcType=SMALLINT}

@@ -1,5 +1,6 @@
 package com.thesis.service;
 
+import com.thesis.common.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.concurrent.ExecutionException;
@@ -30,17 +31,19 @@ public interface TokenService {
 
 
     /**
-     * 重新获取 token
+     * 更新 token 中存储的的用户信息
      *
-     * @param token
+     * @param user 用户信息
+     * @throws ExecutionException
      */
-    void refreshToken(String token, byte status) throws ExecutionException;
+    void refreshToken(User user) throws ExecutionException;
 
     /**
      * 存储 token
      *
      * @param token
+     * @param id
      * @param userDetails
      */
-    void saveToken(String token, UserDetails userDetails);
+    void saveToken(String token, Long id, UserDetails userDetails);
 }

@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setStatus(status);
         try {
-            tokenService.refreshToken(token, status);
+            tokenService.refreshToken(user);
         } catch (ExecutionException e) {
             e.printStackTrace();
         }

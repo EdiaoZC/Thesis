@@ -7,9 +7,13 @@ import com.thesis.common.model.Device;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.common.model.form.DeviceForm;
+import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.common.model.vo.DeviceVo;
+import com.thesis.common.model.vo.TrainingResultVo;
 import com.thesis.dao.mapper.DeviceMapper;
 import com.thesis.service.DeviceService;
+import com.thesis.service.TrainingResultService;
 import com.thesis.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +41,9 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceMapper deviceMapper;
     @Autowired
     private WebSocketService webSocketService;
+    private ConcurrentHashMap<String, DeviceRequestForm> request;
+    @Autowired
+    private TrainingResultService resultService;
 
 
     private ConcurrentHashMap<String, DeferResult<RunningParam>> deferredHolder;
@@ -52,6 +59,7 @@ public class DeviceServiceImpl implements DeviceService {
         this.lock = new ReentrantLock();
         this.taskComplete = lock.newCondition();
         fieldUpdater = AtomicIntegerFieldUpdater.newUpdater(DeferResult.class, "status");
+        this.request = new ConcurrentHashMap<>();
     }
 
 
@@ -60,7 +68,6 @@ public class DeviceServiceImpl implements DeviceService {
         Device device = new Device();
         BeanUtils.copyProperties(deviceForm, device);
         device.setEquipmentType(deviceForm.getDeviceType());
-        log.debug("device对象是:{}", device);
         return deviceMapper.insertSelective(device) == 1;
     }
 
@@ -70,10 +77,10 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public RunningParam requestDevice(String token) throws TimeoutException {
-        log.debug("请求正在处理中");
+    public RunningParam requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
         DeferResult<RunningParam> deferResult = new DeferResult<>();
         deferredHolder.put(token, deferResult);
+        request.put(token, form);
         webSocketService.sendMessage(token);
         try {
             lock.lock();
@@ -85,7 +92,6 @@ public class DeviceServiceImpl implements DeviceService {
         } finally {
             lock.unlock();
         }
-        log.debug("请求处理完毕");
         return (RunningParam) deferResult.getResult();
     }
 
@@ -93,19 +99,45 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response<String> handleRequest(String token, RunningParam param) throws RequestAlreadyException {
         DeferResult<RunningParam> deferResult = deferredHolder.get(token);
+        try {
+            lock.lock();
+            deferResult.setStatus(DeferResult.COMPLETE);
+            deferResult.setResult(param);
+            taskComplete.signalAll();
+            return Response.<String>builder().code(200).msg("success").data("设置成功").build();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+
+    @Override
+    public Response<String> preHandle(String token) {
+        DeferResult<RunningParam> deferResult = deferredHolder.get(token);
         if (fieldUpdater.compareAndSet(deferResult, 0, 1)) {
-            try {
-                lock.lock();
-                deferResult.setStatus(DeferResult.COMPLETE);
-                deferResult.setResult(param);
-                taskComplete.signalAll();
-                return Response.<String>builder().code(200).msg("success").data("设置成功").build();
-            } finally {
-                lock.unlock();
-            }
+            return Response.<String>builder().code(200).msg("success").build();
         } else {
             throw new RequestAlreadyException();
         }
+    }
+
+    @Override
+    public DeviceRequestVo doHandle(String token) {
+        final DeviceRequestForm deviceRequestForm = request.get(token);
+        String username = deviceRequestForm.getUsername();
+        String deviceId = deviceRequestForm.getDeviceId();
+        final String param = getRun(deviceId);
+        final List<TrainingResultVo> resultVos = resultService.personalResult(username, deviceId);
+        DeviceRequestVo vo = new DeviceRequestVo();
+        vo.setParams(param);
+        vo.setResults(resultVos);
+        return vo;
+    }
+
+    @Override
+    public String getRun(String deviceId) {
+        String param = deviceMapper.getRunParamByDeviceId(deviceId);
+        return param;
     }
 
     @Override

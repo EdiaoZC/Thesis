@@ -6,6 +6,8 @@ import com.thesis.common.model.Device;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.common.model.form.DeviceForm;
+import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.common.model.vo.DeviceVo;
 
 import java.util.List;
@@ -38,10 +40,11 @@ public interface DeviceService {
      * 康复患者请求使用设备
      *
      * @param token 用户token
+     * @param form
      * @return 设备运行时所需参数
      * @throws TimeoutException
      */
-    RunningParam requestDevice(String token) throws TimeoutException;
+    RunningParam requestDevice(String token, DeviceRequestForm form) throws TimeoutException;
 
 
     /**
@@ -77,4 +80,28 @@ public interface DeviceService {
      * @return 设备详细信息
      */
     Device getInfo(Short deviceId);
+
+    /**
+     * 预处理请求
+     *
+     * @param token
+     * @return
+     */
+    Response<String> preHandle(String token);
+
+    /**
+     * 返回默认运行参数，及以往训练结果
+     *
+     * @param token
+     * @return
+     */
+    DeviceRequestVo doHandle(String token);
+
+    /**
+     * 返回默认运行参数
+     *
+     * @param deviceId
+     * @return
+     */
+    String getRun(String deviceId);
 }

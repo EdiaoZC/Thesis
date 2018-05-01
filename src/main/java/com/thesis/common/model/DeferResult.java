@@ -21,5 +21,5 @@ public class DeferResult<T> extends DeferredResult<T> {
     /**
      * 处理状态：0：未处理，1：正在处理，2：已处理
      */
-    public volatile int status;
+    public volatile int status = 0;
 }

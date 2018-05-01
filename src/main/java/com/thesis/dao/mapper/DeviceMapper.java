@@ -21,4 +21,6 @@ public interface DeviceMapper {
     List<DeviceVo> getAllInfo();
 
     int getDeviceByType(Byte id);
+
+    String getRunParamByDeviceId(String deviceId);
 }

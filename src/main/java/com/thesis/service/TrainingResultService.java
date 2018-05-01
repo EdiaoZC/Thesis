@@ -25,7 +25,7 @@ public interface TrainingResultService {
      * @param name 用户名
      * @return 某个用户的训练结果
      */
-    List<TrainingResultVo> personalResult(String name);
+    List<TrainingResultVo> personalResult(String name,String  deviceId);
 
     /**
      * 记录训练结果
@@ -33,5 +33,5 @@ public interface TrainingResultService {
      * @param resultForm 记录训练结果
      * @return 是否记录成功
      */
-    boolean addTrainingReult(TrainingResultForm resultForm);
+    boolean addTrainingResult(TrainingResultForm resultForm);
 }

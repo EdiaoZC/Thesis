@@ -49,6 +49,7 @@ public class RbacService {
             e.printStackTrace();
         }
         if (user != null) {
+            log.info("user对象是:{}", user);
             if (!user.isEnabled()) {
                 throw new AccountException("账号被禁用");
             }
@@ -58,21 +59,17 @@ public class RbacService {
             String username = user.getUsername();
             if (username != null) {
                 Set<String> urls = getUrlsByUserName(username);
-                log.debug("url对象是:{}", urls);
                 if (urls == null) {
                     throw new AuthorizationServiceException("你没有相应权限，请联系系统管理员！");
                 }
                 String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
                 for (String url : urls) {
-                    log.debug(url + "========" + path);
                     if (pathMatcher.match(url, path)) {
-                        log.debug("成功通过校验");
                         return true;
                     }
                 }
             }
         }
-        log.debug("权限未通过校验");
         return false;
     }
 

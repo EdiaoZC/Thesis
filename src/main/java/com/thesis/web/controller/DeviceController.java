@@ -52,7 +52,14 @@ public class DeviceController {
             return ResponseEntity.ok(device);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
+
+    @ApiOperation("查看设备信息")
+    @GetMapping(value = "/{deviceId:\\w+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> deviceInfo(@PathVariable("deviceId") String deviceId) {
+        String param = deviceService.getRun(deviceId);
+        return ResponseEntity.ok(param);
     }
 
 

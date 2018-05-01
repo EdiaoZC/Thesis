@@ -34,21 +34,6 @@ layui.config({
 
     loadDeviceType();
 
-    var i = 0;
-    $("#addRows").click(function () {
-        var param = unescape("run[" + i + "]");
-        var tr = "<tr>" +
-            "<td><input type=\"checkbox\" name=\"checked\" lay-skin=\"primary\" lay-filter=\"choose\"></td>" +
-            "<td><input type='text' name=" + param + ".key class='layui-input' placeholder='轻输入选项值'/></td>" +
-            "<td><input type='text' name=" + param + ".value class='layui-input' placeholder='轻输入参数值'/></td></tr>";
-        $("#runningParam").append(tr);//向table中追加tr
-        form.render();
-        i++;
-    });
-    $("#delRows").click(function () {
-        $("input:checked").parent().parent("tr").remove();//移除选中的行
-        form.render();
-    });
     form.on("submit(addDevice)", function (data) {
         var formdata = $(".layui-form").serialize();
         console.log(formdata);

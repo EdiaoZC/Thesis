@@ -2,15 +2,17 @@ package com.thesis.web.controller;
 
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
+import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.service.DeviceService;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
+import java.util.PriorityQueue;
 
 /**
  * @Author: ZcEdiaos
@@ -18,15 +20,27 @@ import java.awt.*;
  * @Description:
  */
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("/doctor/device")
 public class DoctorController {
 
     @Autowired
     private DeviceService deviceService;
 
+    @GetMapping
+    public Response<String> preHandle(String token) {
+        return deviceService.preHandle(token);
+    }
 
-    @PostMapping(value = "/device", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Response<String> handleRequest(String token, RunningParam param) {
+
+    @GetMapping("/{token:\\w+}")
+    public Response<DeviceRequestVo> doHandle(@PathVariable("token") String token) {
+        final DeviceRequestVo deviceRequestVo = deviceService.doHandle(token);
+        return Response.<DeviceRequestVo>builder().code(200).data(deviceRequestVo).build();
+    }
+
+    @ResponseBody
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Response<String> postHandle(String token, RunningParam param) {
         return deviceService.handleRequest(token, param);
     }
 }
