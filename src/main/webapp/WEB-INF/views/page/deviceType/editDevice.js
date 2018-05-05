@@ -33,7 +33,7 @@ layui.config({
                     "<td><input type='text' value=" + item.key + "  name=" + param + ".key class='layui-input' placeholder='轻输入选项值'/></td>" +
                     "<td><input type='text' value=" + item.value + " name=" + param + ".value class='layui-input' placeholder='轻输入参数值'/></td></tr>";
                 i++;
-            })
+            });
             $("#runningParam").append(tr);//向table中追加tr
             form.render();
         }

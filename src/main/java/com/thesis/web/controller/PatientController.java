@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -29,11 +30,11 @@ public class PatientController {
     private DeviceService deviceService;
 
     @RequestMapping(value = "/device", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Callable<ResponseEntity<RunningParam>> deviceRequest(String token, DeviceRequestForm form) {
-        return new Callable<ResponseEntity<RunningParam>>() {
+    public Callable<ResponseEntity<List<RunningParam>>> deviceRequest(String token, DeviceRequestForm form) {
+        return new Callable<ResponseEntity<List<RunningParam>>>() {
             @Override
-            public ResponseEntity<RunningParam> call() throws Exception {
-                return ResponseEntity.ok(deviceService.requestDevice(token,form));
+            public ResponseEntity<List<RunningParam>> call() throws Exception {
+                return ResponseEntity.ok(deviceService.requestDevice(token, form));
             }
         };
     }

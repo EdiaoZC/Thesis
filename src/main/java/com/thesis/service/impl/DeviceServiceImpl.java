@@ -8,6 +8,7 @@ import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.common.model.form.DeviceForm;
 import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.form.RequestForm;
 import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.common.model.vo.DeviceVo;
 import com.thesis.common.model.vo.TrainingResultVo;
@@ -46,7 +47,7 @@ public class DeviceServiceImpl implements DeviceService {
     private TrainingResultService resultService;
 
 
-    private ConcurrentHashMap<String, DeferResult<RunningParam>> deferredHolder;
+    private ConcurrentHashMap<String, DeferResult<List<RunningParam>>> deferredHolder;
 
     private Lock lock;
 
@@ -77,8 +78,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public RunningParam requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
-        DeferResult<RunningParam> deferResult = new DeferResult<>();
+    public List<RunningParam> requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
+        DeferResult<List<RunningParam>> deferResult = new DeferResult<>();
         deferredHolder.put(token, deferResult);
         request.put(token, form);
         webSocketService.sendMessage(token);
@@ -92,17 +93,19 @@ public class DeviceServiceImpl implements DeviceService {
         } finally {
             lock.unlock();
         }
-        return (RunningParam) deferResult.getResult();
+        final List<RunningParam> result = (List<RunningParam>) deferResult.getResult();
+        log.debug("result对象是:{}", result);
+        return result;
     }
 
 
     @Override
-    public Response<String> handleRequest(String token, RunningParam param) throws RequestAlreadyException {
-        DeferResult<RunningParam> deferResult = deferredHolder.get(token);
+    public Response<String> handleRequest(RequestForm request) throws RequestAlreadyException {
+        DeferResult<List<RunningParam>> deferResult = deferredHolder.get(request.getToken());
         try {
             lock.lock();
             deferResult.setStatus(DeferResult.COMPLETE);
-            deferResult.setResult(param);
+            deferResult.setResult(request.getRun());
             taskComplete.signalAll();
             return Response.<String>builder().code(200).msg("success").data("设置成功").build();
         } finally {
@@ -113,7 +116,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response<String> preHandle(String token) {
-        DeferResult<RunningParam> deferResult = deferredHolder.get(token);
+        DeferResult<List<RunningParam>> deferResult = deferredHolder.get(token);
         if (fieldUpdater.compareAndSet(deferResult, 0, 1)) {
             return Response.<String>builder().code(200).msg("success").build();
         } else {

@@ -7,6 +7,7 @@ import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.common.model.form.DeviceForm;
 import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.form.RequestForm;
 import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.common.model.vo.DeviceVo;
 
@@ -44,18 +45,17 @@ public interface DeviceService {
      * @return 设备运行时所需参数
      * @throws TimeoutException
      */
-    RunningParam requestDevice(String token, DeviceRequestForm form) throws TimeoutException;
+    List<RunningParam> requestDevice(String token, DeviceRequestForm form) throws TimeoutException;
 
 
     /**
      * 医生返回设备运行参数
      *
-     * @param token        用户token
-     * @param runningParam 设备运行时参数
+     * @param request 设备运行时参数
      * @return 处理结果是否成功
      * @throws RequestAlreadyException
      */
-    Response<String> handleRequest(String token, RunningParam runningParam) throws RequestAlreadyException;
+    Response<String> handleRequest(RequestForm request) throws RequestAlreadyException;
 
 
     /**

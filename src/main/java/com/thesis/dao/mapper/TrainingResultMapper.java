@@ -2,6 +2,7 @@ package com.thesis.dao.mapper;
 
 import com.thesis.common.model.TrainingResult;
 import com.thesis.common.model.vo.TrainingResultVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface TrainingResultMapper {
 
     int updateByPrimaryKey(TrainingResult record);
 
-    List<TrainingResultVo> getAllInfo(String username, String deviceId);
+    List<TrainingResultVo> getAllInfo(@Param("username") String username,@Param("deviceId") String deviceId);
 
     List<TrainingResultVo> getAllInfo(String username);
 

@@ -45,7 +45,7 @@ public class DeviceController {
     }
 
     @ApiOperation("查看设备信息")
-    @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/id/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Device> deviceInfo(@PathVariable("id") Short id) {
         Device device = deviceService.getInfo(id);
         if (device != null) {

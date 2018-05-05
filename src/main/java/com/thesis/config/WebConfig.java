@@ -7,13 +7,17 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.thesis.common.model.DeviceStatus;
 import com.thesis.common.webSocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,11 +31,18 @@ import java.util.List;
 @Import(SwaggerConfig.class)
 @EnableWebSocket
 @ImportResource("classpath:spring/applicationContext-mvc.xml")
+@PropertySource("classpath:properties/task.properties")
 public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
 
     @Autowired
     private WebSocketHandler socketHandler;
+
+    @Autowired
+    private AsyncTaskExecutor taskExecutor;
+
+    @Value("${timeout}")
+    private Long timeout;
 
 
     @Override
@@ -64,6 +75,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-        super.configureAsyncSupport(configurer);
+        configurer.setDefaultTimeout(timeout);
+        configurer.setTaskExecutor(taskExecutor);
     }
 }

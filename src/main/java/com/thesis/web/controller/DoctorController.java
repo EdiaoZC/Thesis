@@ -3,6 +3,7 @@ package com.thesis.web.controller;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.RunningParam;
 import com.thesis.common.model.form.DeviceRequestForm;
+import com.thesis.common.model.form.RequestForm;
 import com.thesis.common.model.vo.DeviceRequestVo;
 import com.thesis.service.DeviceService;
 import jdk.nashorn.internal.objects.annotations.Getter;
@@ -26,21 +27,21 @@ public class DoctorController {
     @Autowired
     private DeviceService deviceService;
 
+
     @GetMapping
     public Response<String> preHandle(String token) {
         return deviceService.preHandle(token);
     }
 
 
-    @GetMapping("/{token:\\w+}")
+    @GetMapping("/token/{token}")
     public Response<DeviceRequestVo> doHandle(@PathVariable("token") String token) {
         final DeviceRequestVo deviceRequestVo = deviceService.doHandle(token);
         return Response.<DeviceRequestVo>builder().code(200).data(deviceRequestVo).build();
     }
 
-    @ResponseBody
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Response<String> postHandle(String token, RunningParam param) {
-        return deviceService.handleRequest(token, param);
+    public Response<String> postHandle(RequestForm request) {
+        return deviceService.handleRequest(request);
     }
 }

@@ -26,7 +26,7 @@ layui.config({
                 html = "";
                 if (currData.length != 0) {
                     for (var i = 0; i < currData.length; i++) {
-                        html = '<option value="' + currData[i].typeId + '">';
+                        html = '<option value="' + currData[i].id + '">';
                         html += currData[i].deviceType + '</option>';
                         console.log(html);
                         $('.deviceType').append($(html));
@@ -47,7 +47,7 @@ layui.config({
 
     $(".id").val(oneValues());
     $.ajax({
-        url: "/devices/" + oneValues(),
+        url: "/devices/id/" + oneValues(),
         type: "GET",
         async: true,
         success: function (data) {

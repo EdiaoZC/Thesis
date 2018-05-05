@@ -27,7 +27,7 @@
             and username = #{username,jdbcType=VARCHAR}
         </if>
         <if test="deviceId !=null">
-            and equipment_type = (select equiment_type from device where devcie_id = #{devicdId,jdbcType = VARCHAR} )
+            and equipment_type = (select equipment_type from device where device_id = #{deviceId ,jdbcType = VARCHAR} )
         </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
