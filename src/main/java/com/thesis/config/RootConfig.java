@@ -17,6 +17,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                 , value = {Controller.class, ControllerAdvice.class, EnableWebMvc.class})})
 @EnableTransactionManagement
 @ImportResource("classpath:/spring/applicationContext-dao.xml")
-@PropertySource("classpath:properties/security.properties")
+@PropertySource( {"classpath:properties/security.properties"})
 public class RootConfig {
 }

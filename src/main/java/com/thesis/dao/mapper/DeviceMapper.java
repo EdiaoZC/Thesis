@@ -2,6 +2,7 @@ package com.thesis.dao.mapper;
 
 import com.thesis.common.model.Device;
 import com.thesis.common.model.vo.DeviceVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface DeviceMapper {
     int getDeviceByType(Byte id);
 
     String getRunParamByDeviceId(String deviceId);
+
+    boolean updateStatus(@Param("deviceId") String deviceId,@Param("status")int status);
 }

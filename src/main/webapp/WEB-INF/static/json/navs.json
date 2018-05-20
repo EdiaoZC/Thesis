@@ -22,5 +22,11 @@
     "icon": "&#xe631;",
     "href": "page/trainingResult/trainingResult.html",
     "spread": false
+  },
+  {
+    "title": "未处理的请求",
+    "icon": "&#xe631;",
+    "href": "page/doctor/unHandleRequest.html",
+    "spread": false
   }
 ]

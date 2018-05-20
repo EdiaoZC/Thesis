@@ -1,5 +1,6 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.constants.Status;
 import com.thesis.common.exception.RequestAlreadyException;
 import com.thesis.common.exception.TimeoutException;
 import com.thesis.common.model.DeferResult;
@@ -19,7 +20,9 @@ import com.thesis.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,10 +45,16 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceMapper deviceMapper;
     @Autowired
     private WebSocketService webSocketService;
-    private ConcurrentHashMap<String, DeviceRequestForm> request;
+
+    private ConcurrentHashMap<String, DeviceRequestForm> preHandle;
+
+    private ConcurrentHashMap<String, DeviceRequestForm> doHandle;
     @Autowired
     private TrainingResultService resultService;
 
+    private Long timeOut;
+
+    private Response<String> timeOutObject;
 
     private ConcurrentHashMap<String, DeferResult<List<RunningParam>>> deferredHolder;
 
@@ -60,7 +69,10 @@ public class DeviceServiceImpl implements DeviceService {
         this.lock = new ReentrantLock();
         this.taskComplete = lock.newCondition();
         fieldUpdater = AtomicIntegerFieldUpdater.newUpdater(DeferResult.class, "status");
-        this.request = new ConcurrentHashMap<>();
+        this.preHandle = new ConcurrentHashMap<>();
+        this.doHandle = new ConcurrentHashMap<>();
+        this.timeOut = 100000L;
+        this.timeOutObject = Response.<String>builder().code(410).msg("fail").data("超时").build();
     }
 
 
@@ -79,13 +91,20 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<RunningParam> requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
-        DeferResult<List<RunningParam>> deferResult = new DeferResult<>();
+        //设置超时
+        DeferResult<List<RunningParam>> deferResult = new DeferResult<>(timeOut, timeOutObject);
         deferredHolder.put(token, deferResult);
-        request.put(token, form);
+        preHandle.put(token, form);
+        final String deviceId = form.getDeviceId();
+        deviceMapper.updateStatus(deviceId, Status.USING);
         webSocketService.sendMessage(token);
         try {
             lock.lock();
-            while (deferResult.status != DeferResult.COMPLETE) {
+            while (deferResult.getStatus() != DeferResult.COMPLETE) {
+                if (deferResult.getStatus() == DeferResult.CANCEL) {
+                    deferredHolder.remove(token);
+                    break;
+                }
                 taskComplete.await();
             }
         } catch (InterruptedException e) {
@@ -94,7 +113,7 @@ public class DeviceServiceImpl implements DeviceService {
             lock.unlock();
         }
         final List<RunningParam> result = (List<RunningParam>) deferResult.getResult();
-        log.debug("result对象是:{}", result);
+        deferredHolder.remove(token);
         return result;
     }
 
@@ -118,6 +137,9 @@ public class DeviceServiceImpl implements DeviceService {
     public Response<String> preHandle(String token) {
         DeferResult<List<RunningParam>> deferResult = deferredHolder.get(token);
         if (fieldUpdater.compareAndSet(deferResult, 0, 1)) {
+            final DeviceRequestForm deviceRequestForm = preHandle.get(token);
+            preHandle.remove(token);
+            doHandle.put(token, deviceRequestForm);
             return Response.<String>builder().code(200).msg("success").build();
         } else {
             throw new RequestAlreadyException();
@@ -126,7 +148,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceRequestVo doHandle(String token) {
-        final DeviceRequestForm deviceRequestForm = request.get(token);
+        final DeviceRequestForm deviceRequestForm = preHandle.get(token);
         String username = deviceRequestForm.getUsername();
         String deviceId = deviceRequestForm.getDeviceId();
         final String param = getRun(deviceId);
@@ -137,10 +159,28 @@ public class DeviceServiceImpl implements DeviceService {
         return vo;
     }
 
+
     @Override
     public String getRun(String deviceId) {
         String param = deviceMapper.getRunParamByDeviceId(deviceId);
         return param;
+    }
+
+    @Override
+    public Response<Object> unHandleRequest() {
+        if (preHandle == null || preHandle.size() == 0) {
+            return Response.builder().code(402).msg("没有请求").build();
+        }
+        return Response.builder().code(200).msg("success").data(preHandle.keySet()).build();
+    }
+
+    @Override
+    public Response<String> cancelRequest(String token, String deviceId) {
+        deferredHolder.get(token).setStatus(DeferResult.CANCEL);
+        deviceMapper.updateStatus(deviceId, Status.NORMAL);
+        preHandle.remove(token);
+        doHandle.remove(token);
+        return Response.<String>builder().code(200).msg("success").build();
     }
 
     @Override

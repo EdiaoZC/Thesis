@@ -104,4 +104,20 @@ public interface DeviceService {
      * @return
      */
     String getRun(String deviceId);
+
+    /**
+     * 返回未处理的设备请求
+     *
+     * @return 未处理的设备请求的url
+     */
+    Response<Object> unHandleRequest();
+
+    /**
+     * 取消使用设备的请求
+     *
+     * @param token    用户的标识
+     * @param deviceId 设备标识
+     * @return
+     */
+    Response<String> cancelRequest(String token, String deviceId);
 }

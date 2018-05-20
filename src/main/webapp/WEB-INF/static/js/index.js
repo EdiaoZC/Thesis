@@ -369,7 +369,7 @@ layui.config({
     function onMessage(data) {
         layer.confirm('处理该请求？', {icon: 3, title: '提示信息'}, function (index) {
                 $.ajax({
-                    url: "/doctor/device?token=" + data.data,
+                    url: "/doctor?token=" + data.data,
                     type: "GET",
                     success: function (result) {
                         if (result.code == 200) {

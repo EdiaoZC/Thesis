@@ -31,7 +31,6 @@ import java.util.List;
 @Import(SwaggerConfig.class)
 @EnableWebSocket
 @ImportResource("classpath:spring/applicationContext-mvc.xml")
-@PropertySource("classpath:properties/task.properties")
 public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
 
@@ -41,8 +40,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
     @Autowired
     private AsyncTaskExecutor taskExecutor;
 
-    @Value("${timeout}")
-    private Long timeout;
+    private Long timeout = 100000L;
 
 
     @Override
