@@ -1,10 +1,13 @@
 package com.thesis.service.impl;
 
 import com.thesis.common.exception.AccountException;
+import com.thesis.common.holder.RolesHolder;
 import com.thesis.common.holder.TokenHolder;
 import com.thesis.service.PermissionService;
+import com.thesis.service.RoleService;
 import com.thesis.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.Authentication;
@@ -32,6 +35,9 @@ public class RbacService {
     private PermissionService permissionService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private TokenService tokenService;
 
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
@@ -49,6 +55,8 @@ public class RbacService {
             e.printStackTrace();
         }
         if (user != null) {
+            Set<String> roles = roleService.getRoleByUsername(user.getUsername());
+            RolesHolder.setRoles(roles);
             log.info("user对象是:{}", user);
             if (!user.isEnabled()) {
                 throw new AccountException("账号被禁用");

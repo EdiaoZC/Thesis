@@ -2,31 +2,31 @@
   {
     "title": "设备类型",
     "icon": "icon-text",
-    "href": "page/deviceType/deviceList.html",
+    "href": "deviceType/deviceList.html",
     "spread": false
   },
   {
     "title": "设备列表",
     "icon": "icon-text",
-    "href": "page/devices/deviceList.html",
+    "href": "devices/deviceList.html",
     "spread": false
   },
   {
     "title": "用户列表",
     "icon": "&#xe64c;",
-    "href": "page/users/userList.html",
+    "href": "users/userList.html",
     "spread": false
   },
   {
     "title": "训练结果",
     "icon": "&#xe631;",
-    "href": "page/trainingResult/trainingResult.html",
+    "href": "trainingResult/trainingResult.html",
     "spread": false
   },
   {
     "title": "未处理的请求",
     "icon": "&#xe631;",
-    "href": "page/doctor/unHandleRequest.html",
+    "href": "doctor/unHandleRequest.html",
     "spread": false
   }
 ]

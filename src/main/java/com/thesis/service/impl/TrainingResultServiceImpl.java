@@ -1,16 +1,21 @@
 package com.thesis.service.impl;
 
+import com.thesis.common.holder.RolesHolder;
+import com.thesis.common.constants.Role;
+import com.thesis.common.holder.UserHolder;
 import com.thesis.common.model.TrainingResult;
 import com.thesis.common.model.form.TrainingResultForm;
 import com.thesis.common.model.vo.TrainingResultVo;
 import com.thesis.dao.mapper.TrainingResultMapper;
 import com.thesis.service.TrainingResultService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: ZcEdiaos
@@ -26,6 +31,15 @@ public class TrainingResultServiceImpl implements TrainingResultService {
 
     @Override
     public List<TrainingResultVo> resultList() {
+        final Set<String> roles = RolesHolder.getRoles();
+        for (String role : roles) {
+            if (Role.PATIENTS.equals(role)) {
+                String username = UserHolder.getUser();
+                if (StringUtils.isNoneBlank(username)) {
+                    return personalResult(username, null);
+                }
+            }
+        }
         return resultMapper.getAllInfo();
     }
 
