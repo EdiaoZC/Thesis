@@ -20,7 +20,7 @@
     <!-- 顶部 -->
     <div class="layui-header header">
         <div class="layui-main">
-            <a href="#" class="logo">layui后台管理</a>
+            <a href="#" class="logo">智能康复设备管理系统</a>
             <!-- 显示/隐藏菜单 -->
             <a href="javascript:;" class="iconfont hideMenu icon-menu1"></a>
             <!-- 天气信息 -->
@@ -110,7 +110,7 @@
     <div class="layui-body layui-form">
         <div class="layui-tab marg0" lay-filter="bodyTab" id="top_tabs_box">
             <ul class="layui-tab-title top_tab" id="top_tabs">
-                <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>后台首页</cite></li>
+                <li class="layui-this" lay-id=""><i class="iconfont icon-computer"></i> <cite>首页</cite></li>
             </ul>
             <ul class="layui-nav closeBox">
                 <li class="layui-nav-item">
@@ -127,7 +127,7 @@
             </ul>
             <div class="layui-tab-content clildFrame">
                 <div class="layui-tab-item layui-show">
-                    <iframe src="main.html"></iframe>
+                    <iframe src="views/main.html"></iframe>
                 </div>
             </div>
         </div>

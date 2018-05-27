@@ -6,6 +6,10 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="descr" jdbcType="VARCHAR" property="descr"/>
     </resultMap>
+
+    <resultMap id="RolePermission" type="com.thesis.common.model.dto.RolePermissionDto">
+        <collection property="permissions" select=""
+    </resultMap>
     <sql id="Base_Column_List">
     id, name, descr
   </sql>
@@ -14,6 +18,13 @@
         <include refid="Base_Column_List"/>
         from role
         where id = #{id,jdbcType=TINYINT}
+    </select>
+    <select id="getRoleByUsername" resultType="java.lang.String">
+        select c.id,c.name from user a join user_role b join role c
+        on a.id=b.user_id and b.role_id = c.id and username=#{username}
+    </select>
+    <select id="getRoles" resultType="com.thesis.common.model.vo.RoleVo">
+
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
     delete from role

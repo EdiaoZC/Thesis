@@ -2,31 +2,51 @@
   {
     "title": "设备类型",
     "icon": "icon-text",
-    "href": "deviceType/deviceList.html",
+    "href": "views/deviceType/deviceList.html",
     "spread": false
   },
   {
     "title": "设备列表",
     "icon": "icon-text",
-    "href": "devices/deviceList.html",
+    "href": "views/devices/deviceList.html",
     "spread": false
   },
   {
     "title": "用户列表",
     "icon": "&#xe64c;",
-    "href": "users/userList.html",
+    "href": "views/users/userList.html",
     "spread": false
   },
   {
     "title": "训练结果",
     "icon": "&#xe631;",
-    "href": "trainingResult/trainingResult.html",
+    "href": "views/trainingResult/trainingResult.html",
     "spread": false
   },
   {
     "title": "未处理的请求",
-    "icon": "&#xe631;",
-    "href": "doctor/unHandleRequest.html",
+    "icon": "&#xe629;",
+    "href": "views/doctor/unHandleRequest.html",
     "spread": false
+  },
+  {
+    "title": "权限管理",
+    "icon": "&#xe672;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "角色管理",
+        "icon": "&#xe66f;",
+        "href": "views/roles/roles.html",
+        "spread": false
+      },
+      {
+        "title": "权限管理",
+        "icon": "&#xe672;",
+        "href": "views/permission/permission.html",
+        "spread": false
+      }
+    ]
   }
 ]

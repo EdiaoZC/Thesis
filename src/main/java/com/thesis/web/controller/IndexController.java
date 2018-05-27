@@ -19,10 +19,6 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping({"/main"})
-    public String main() {
-        return "/WEB-INF/views/page/main.html";
-    }
 
 
 }

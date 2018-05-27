@@ -36,7 +36,7 @@
     <mvc:resources location="/WEB-INF/static/layui/" mapping="/layui/**"/>
     <mvc:resources location="/WEB-INF/static/images/" mapping="/images/**"/>
     <mvc:resources location="/WEB-INF/static/json/" mapping="/json/**"/>
-    <mvc:resources location="/WEB-INF/views/page/" mapping="/page/**"/>
+    <mvc:resources mapping="/views/**" location="/WEB-INF/views/"/>
 
 
 </beans>

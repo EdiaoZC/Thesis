@@ -40,6 +40,8 @@ public class RbacService {
     @Autowired
     private TokenService tokenService;
 
+    private String[] prefixs = {"", "/views"};
+
     public boolean hasPermission(HttpServletRequest request, Authentication auth) {
         Object principal = auth.getPrincipal();
         UserDetails user = null;
@@ -72,8 +74,10 @@ public class RbacService {
                 }
                 String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
                 for (String url : urls) {
-                    if (pathMatcher.match(url, path)) {
-                        return true;
+                    for (String prefix : prefixs) {
+                        if (pathMatcher.match(url, prefix + path)) {
+                            return true;
+                        }
                     }
                 }
             }

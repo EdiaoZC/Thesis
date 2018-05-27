@@ -1,7 +1,12 @@
 package com.thesis.service;
 
 import com.thesis.common.model.Role;
+import com.thesis.common.model.dto.RolePermissionDto;
+import com.thesis.common.model.form.RoleForm;
+import com.thesis.common.model.vo.RoleVo;
+import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +29,7 @@ public interface RoleService {
      * @param role 角色
      * @return 添加是否成功
      */
-    int addRole(Role role);
+    boolean addRole(RoleForm role);
 
     /**
      * 删除角色信息
@@ -33,4 +38,9 @@ public interface RoleService {
      */
     int delRole(Role role);
 
+    /**
+     * 返回角色列表
+     * @return
+     */
+    List<RoleVo> getRoles(Byte id);
 }

@@ -2,6 +2,7 @@ package com.thesis.web.controller;
 
 import com.thesis.common.model.Response;
 import com.thesis.common.model.Role;
+import com.thesis.common.model.form.RoleForm;
 import com.thesis.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,21 +29,21 @@ public class RoleController {
 
     @GetMapping()
     @ApiOperation("查看角色")
-    public ResponseEntity<List<Role>> getRole() {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<Role>> getRoles() {
+        return roleService.getRoles();
     }
 
     @GetMapping("/{id:\\d+}")
     @ApiOperation("查看角色详细信息")
     public ResponseEntity<Role> roleInfo(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(null);
+        return roleService.getRoles(id);
     }
 
 
     @PostMapping()
     @ApiOperation("添加角色信息")
-    public ResponseEntity<Role> addRole(@Valid Role role, Errors errors) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<Role> addRole(@Valid RoleForm role, Errors errors) {
+        return roleService.addRole(role);
     }
 
 
