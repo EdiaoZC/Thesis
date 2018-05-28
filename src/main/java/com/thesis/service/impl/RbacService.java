@@ -3,6 +3,7 @@ package com.thesis.service.impl;
 import com.thesis.common.exception.AccountException;
 import com.thesis.common.holder.RolesHolder;
 import com.thesis.common.holder.TokenHolder;
+import com.thesis.common.model.Role;
 import com.thesis.service.PermissionService;
 import com.thesis.service.RoleService;
 import com.thesis.service.TokenService;
@@ -17,6 +18,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -57,8 +59,10 @@ public class RbacService {
             e.printStackTrace();
         }
         if (user != null) {
-            Set<String> roles = roleService.getRoleByUsername(user.getUsername());
-            RolesHolder.setRoles(roles);
+            Set<Role> roles = roleService.getRoleByUsername(user.getUsername());
+            final Set<String> roleNames = new HashSet<>();
+            roles.forEach(role -> roleNames.add(role.getName()));
+            RolesHolder.setRoles(roleNames);
             log.info("user对象是:{}", user);
             if (!user.isEnabled()) {
                 throw new AccountException("账号被禁用");

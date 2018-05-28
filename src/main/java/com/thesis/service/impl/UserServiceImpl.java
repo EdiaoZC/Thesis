@@ -2,13 +2,15 @@ package com.thesis.service.impl;
 
 import com.thesis.common.constants.Error;
 import com.thesis.common.exception.RegisterException;
-import com.thesis.common.model.AccountStatus;
-import com.thesis.common.model.User;
+import com.thesis.common.model.*;
+import com.thesis.common.model.dto.UserRoleDto;
 import com.thesis.common.model.form.UserForm;
 import com.thesis.common.model.vo.UserVo;
 import com.thesis.common.util.Md5Util;
 import com.thesis.dao.mapper.UserMapper;
+import com.thesis.service.RoleService;
 import com.thesis.service.TokenService;
+import com.thesis.service.UserRoleService;
 import com.thesis.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 
@@ -37,6 +40,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public User loadUserByName(String username) {
         return userMapper.selectByUsername(username);
@@ -44,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int register(UserForm userForm) throws RegisterException {
+    public Response<String> register(UserForm userForm) throws RegisterException {
         String salt = Md5Util.gensalt(6);
         User user = new User();
         if (!userForm.getPassword().equals(userForm.getConfirmPassword())) {
@@ -53,8 +62,21 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userForm, user);
         user.setSalt(salt);
         user.setPassword(Md5Util.getMD5AndSalt(userForm.getPassword(), salt));
-        log.debug("user对象是:{}", user);
-        return userMapper.insertSelective(user);
+        UserRoleDto userRoleDto = new UserRoleDto();
+        userMapper.insertSelective(user);
+        userRoleDto.setUserId(user.getId());
+        userRoleDto.setRoleIds(userForm.getRoles());
+        boolean result = userRoleService.updateUserRole(userRoleDto);
+        if (!result) {
+            return Response.<String>builder().code(400).msg("fail")
+                    .data("患者角色与其他角色不能同时存在").build();
+        }
+        if (userMapper.insertSelective(user) != 1) {
+            return Response.<String>builder().code(400)
+                    .msg("fail").data("失败").build();
+        }
+        return Response.<String>builder().code(200)
+                .msg("success").data("成功").build();
     }
 
     @Override
@@ -86,12 +108,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delUserById(Long id) {
+        userRoleService.deleteByUserId(id);
         return userMapper.deleteByPrimaryKey(id) == 1;
     }
 
     @Override
-    public boolean updateUserById(UserForm userForm, String token) {
+    @Transactional(rollbackFor = Exception.class)
+    public Response<String> updateUserById(UserForm userForm, String token) {
         User user = new User();
         log.info("token是多少:{}", token);
         BeanUtils.copyProperties(userForm, user);
@@ -107,12 +132,33 @@ public class UserServiceImpl implements UserService {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return userMapper.updateByPrimaryKeySelective(user) == 1;
+        UserRoleDto userRoleDto = new UserRoleDto();
+        userRoleDto.setUserId(user.getId());
+        userRoleDto.setRoleIds(userForm.getRoles());
+        final boolean result = userRoleService.updateUserRole(userRoleDto);
+        if (!result) {
+            return Response.<String>builder().code(400).msg("fail")
+                    .data("患者角色与其他角色不能同时存在").build();
+        }
+        if (userMapper.updateByPrimaryKeySelective(user) != 1) {
+            return Response.<String>builder().code(400)
+                    .msg("fail").data("失败").build();
+        }
+        return Response.<String>builder().code(200)
+                .msg("success").data("成功").build();
     }
 
     @Override
-    public User getInfoById(Long id) {
-        return userMapper.selectByPrimaryKey(id);
+    public UserVo getInfoById(Long id) {
+        UserVo userVo = new UserVo();
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
+            return null;
+        }
+        BeanUtils.copyProperties(user, userVo);
+        final Set<Role> roles = roleService.getRoleByUsername(user.getUsername());
+        userVo.setRoles(roles);
+        return userVo;
     }
 
 

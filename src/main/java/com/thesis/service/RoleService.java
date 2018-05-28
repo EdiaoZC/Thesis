@@ -22,10 +22,11 @@ public interface RoleService {
      * @param username 用户名
      * @return 用户拥有的角色
      */
-    Set<String> getRoleByUsername(String username);
+    Set<Role> getRoleByUsername(String username);
 
     /**
      * 添加角色信息
+     *
      * @param role 角色
      * @return 添加是否成功
      */
@@ -33,14 +34,24 @@ public interface RoleService {
 
     /**
      * 删除角色信息
-     * @param role
+     *
+     * @param roleId
      * @return
      */
-    int delRole(Role role);
+    int delRole(Byte roleId);
 
     /**
      * 返回角色列表
+     *
      * @return
      */
     List<RoleVo> getRoles(Byte id);
+
+    /**
+     * 更新角色信息
+     *
+     * @param role
+     * @return
+     */
+    boolean updateRole(RoleForm role);
 }

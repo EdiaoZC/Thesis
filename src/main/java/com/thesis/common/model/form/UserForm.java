@@ -36,4 +36,6 @@ public class UserForm {
     private SexEnum sex;
 
     private List<Byte> status;
+
+    private List<Byte> roles;
 }

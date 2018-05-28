@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class ExceptionController {
 
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<String> exception(Throwable e) {
-//        return ResponseEntity.ok(e.getMessage());
-//    }
+    @ExceptionHandler(RuntimeException.class)
+    public Response<String> exception(Throwable e) {
+        return Response.<String>builder().code(400)
+                .msg("fail").msg(e.getMessage()).build();
+    }
 }

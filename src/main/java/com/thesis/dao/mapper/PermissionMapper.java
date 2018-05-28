@@ -3,6 +3,7 @@ package com.thesis.dao.mapper;
 import com.thesis.common.model.Permission;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public interface PermissionMapper {
@@ -19,4 +20,6 @@ public interface PermissionMapper {
     int updateByPrimaryKey(Permission record);
 
     Set<String> getUrlByUsername(String username);
+
+    List<Permission> permissionList();
 }

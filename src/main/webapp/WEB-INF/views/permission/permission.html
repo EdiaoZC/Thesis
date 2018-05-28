@@ -22,7 +22,7 @@
     <!--<a class="layui-btn search_btn">查询</a>-->
     <!--</div>-->
     <div class="layui-inline">
-        <a class="layui-btn layui-btn-normal deviceAdd_btn">添加权限</a>
+        <a class="layui-btn layui-btn-normal deviceAdd_btn">添加角色</a>
     </div>
     <div class="layui-inline">
         <a class="layui-btn layui-btn-danger batchDel">批量删除</a>
@@ -31,18 +31,19 @@
 <div class="layui-form users_list">
     <table class="layui-table">
         <colgroup>
-            <col width="50">
+            <col width="20">
             <col>
-            <col width="18%">
-            <col width="8%">
-            <col width="12%">
+            <col width="30%">
+            <col width="40%">
+            <col width="10%">
         </colgroup>
         <thead>
         <tr>
             <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
             <th>权限</th>
-            <th>权限路径</th>
+            <th>路径</th>
             <th>描述</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody class="users_content"></tbody>
@@ -50,6 +51,6 @@
 </div>
 <div id="page"></div>
 <script type="text/javascript" src="../../layui/layui.js"></script>
-<script type="text/javascript" src="userList.js"></script>
+<script type="text/javascript" src="permission.js"></script>
 </body>
 </html>

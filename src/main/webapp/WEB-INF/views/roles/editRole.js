@@ -13,46 +13,40 @@ layui.config({
         if (url.indexOf("?") != -1) {
             result = url.substr(url.indexOf("=") + 1);
         }
+        console.log(result);
         return result;
     }
 
     $(".id").val(oneValues());
+
     $.ajax({
-        url: "/roles/",
-        type: "GET",
-        async: false,
-        success: function (data) {
-            var roles = data.data;
-            var dataHtml = '';
-            for (var i = 0; i < roles.length; i++) {
-                dataHtml += '<input type="checkbox" name="roles" value="' + roles[i].id +
-                    '" title="' + roles[i].name + '"/>';
-            }
-            $('.roles').html(dataHtml);
-            form.render();
-        }
-    });
-    $.ajax({
-        url: "/users/" + oneValues(),
+        url: "/permission",
         type: "GET",
         async: true,
         success: function (data) {
-            $('.userName').val(data.username);
-            $('.nickname').val(data.nickname);
-            var index = 0;
-            if (data.sex === 'Female') {
-                index = 1;
+            console.log("permission")
+            var permissions = data.data;
+            var dataHtml = '';
+            for (var i = 0; i < permissions.length; i++) {
+                dataHtml += '<input type="checkbox" name="permissions" value="' + permissions[i].id +
+                    '" title="' + permissions[i].perName + '" alt="'+permissions[i].perDesc+'"/>';
             }
-            $('[name=sex]').eq(index).prop('checked', true);
-            if ((data.status & 8) == 8) {
-                $("input[type='checkbox'][name='status'][value='8']").prop('checked', true);
-            }
-            if ((data.status & 1) == 1) {
-                $("input[type='checkbox'][name='status'][value='1']").prop('checked', true);
-            }
-            var roles = data.roles;
-            for (var i = 0; i < roles.length; i++) {
-                $("input[type='checkbox'][name='roles'][value='" + roles[i].id + "']").prop('checked', true);
+            $('.permissions').html(dataHtml);
+            form.render();
+        }
+    });
+
+    $.ajax({
+        url: "/roles/" + oneValues(),
+        type: "GET",
+        async: true,
+        success: function (data) {
+            console.log("roles")
+            $('.name').val(data.data.name);
+            $('.descr').val(data.data.descr);
+            var permissions = data.data.permissions;
+            for (var i = 0; i < permissions.length; i++) {
+                $("input[type='checkbox'][name='permissions'][value='" + permissions[i].id + "']").prop('checked', true);
             }
             form.render();
         }
@@ -62,7 +56,7 @@ layui.config({
     form.on("submit(editUser)", function () {
         var data = $(".edit-form").serialize();
         $.ajax({
-            url: "/users",
+            url: "/roles",
             data: data,
             type: "PUT",
             async: true,

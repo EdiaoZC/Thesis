@@ -31,19 +31,19 @@
   },
   {
     "title": "权限管理",
-    "icon": "&#xe672;",
+    "icon": "icon-text",
     "href": "",
     "spread": false,
     "children": [
       {
         "title": "角色管理",
-        "icon": "&#xe66f;",
+        "icon": "icon-text",
         "href": "views/roles/roles.html",
         "spread": false
       },
       {
         "title": "权限管理",
-        "icon": "&#xe672;",
+        "icon": "icon-text",
         "href": "views/permission/permission.html",
         "spread": false
       }

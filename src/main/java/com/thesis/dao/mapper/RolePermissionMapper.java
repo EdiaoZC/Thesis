@@ -1,8 +1,10 @@
 package com.thesis.dao.mapper;
 
+import com.thesis.common.model.Permission;
 import com.thesis.common.model.RolePermission;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public interface RolePermissionMapper {
@@ -19,4 +21,13 @@ public interface RolePermissionMapper {
     int updateByPrimaryKey(RolePermission record);
 
     Set<Short> getPermissionIdByRoles(Collection<Byte> roleIds);
+
+    List<Permission> getPermissionByRole(Byte id);
+
+    void batchInsert(List<RolePermission> rolePermissions);
+
+
+    int  deleteByRoleId(Byte id);
+
+    int deleteByPermissionId(Integer id);
 }

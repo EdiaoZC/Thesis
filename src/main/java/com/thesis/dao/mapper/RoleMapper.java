@@ -1,7 +1,9 @@
 package com.thesis.dao.mapper;
 
 import com.thesis.common.model.Role;
+import com.thesis.common.model.dto.RolePermissionDto;
 import com.thesis.common.model.vo.RoleVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public interface RoleMapper {
 
     int updateByPrimaryKey(Role record);
 
-    Set<String> getRoleByUsername(String username);
+    Set<Role> getRoleByUsername(String username);
 
-    List<RoleVo> getRoles(Byte id);
+    List<RolePermissionDto> getRoles(@Param("id") Byte id);
 }

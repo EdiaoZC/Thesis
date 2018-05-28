@@ -74,4 +74,22 @@
       permission_id = #{permissionId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="getPermissionByRole" resultType="com.thesis.common.model.Permission">
+        select * from permission where id in
+        (select permission_id from role_permission where role_id =#{role_id})
+    </select>
+    <insert id="batchInsert">
+        insert into role_permission (role_id, permission_id)
+        value
+        <foreach collection="list" item="item" separator=",">
+            (#{item.roleId},#{item.permissionId})
+        </foreach>
+    </insert>
+    <delete id="deleteByRoleId">
+        delete  from role_permission where role_id = #{id}
+    </delete>
+    <delete id="deleteByPermissionId">
+         delete  from role_permission where permission_id = #{id}
+    </delete>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.thesis.service;
 
+import com.thesis.common.model.Response;
 import com.thesis.common.model.User;
 import com.thesis.common.model.form.UserForm;
 import com.thesis.common.model.vo.UserVo;
@@ -28,7 +29,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    int register(UserForm user);
+    Response<String> register(UserForm user);
 
 
     /**
@@ -53,7 +54,7 @@ public interface UserService {
      * @param user 用户信息
      * @return 是否更新成功
      */
-    boolean updateUserById(UserForm user, String token);
+    Response<String> updateUserById(UserForm user, String token);
 
     /**
      * 更具用户 id 获取用户详细信息
@@ -61,5 +62,5 @@ public interface UserService {
      * @param id 用户 id
      * @return 用户信息
      */
-    User getInfoById(Long id);
+    UserVo getInfoById(Long id);
 }

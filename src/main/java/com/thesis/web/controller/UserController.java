@@ -2,6 +2,7 @@ package com.thesis.web.controller;
 
 import com.thesis.common.constants.Error;
 import com.thesis.common.constants.SecurityProperties;
+import com.thesis.common.model.Response;
 import com.thesis.common.model.User;
 import com.thesis.common.model.form.UserForm;
 import com.thesis.common.model.vo.UserVo;
@@ -48,13 +49,12 @@ public class UserController {
     )
     @RequestMapping(method = RequestMethod.POST
             , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> register(@Valid UserForm user, Errors errors) {
+    public Response<String> register(@Valid UserForm user, Errors errors) {
         log.info("userForm对象是:{}", user);
         if (errors.hasErrors()) {
 
         }
-        userService.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("success");
+        return userService.register(user);
     }
 
     @ApiOperation("获取用户列表")
@@ -67,7 +67,7 @@ public class UserController {
     @ApiOperation("获取用户详细信息")
     @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity userInfo(@PathVariable("id") Long id) {
-        User user = userService.getInfoById(id);
+        UserVo user = userService.getInfoById(id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.INFO_NOT_FOUND);
         }
@@ -86,16 +86,13 @@ public class UserController {
 
     @ApiOperation("更新用户")
     @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> userUpdateInfo(@Valid UserForm user, Errors errors) {
+    public Response<String> userUpdateInfo(@Valid UserForm user, Errors errors) {
         String token = RequestUtil.getValue(request, security.getToken());
         log.info("token是多少:{}", token);
         if (errors.hasErrors()) {
 
         }
-        if (userService.updateUserById(user, token)) {
-            return ResponseEntity.ok("success");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+        return userService.updateUserById(user, token);
     }
 
 }

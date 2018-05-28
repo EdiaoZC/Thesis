@@ -7,8 +7,9 @@
         <result column="descr" jdbcType="VARCHAR" property="descr"/>
     </resultMap>
 
-    <resultMap id="RolePermission" type="com.thesis.common.model.dto.RolePermissionDto">
-        <collection property="permissions" select=""
+    <resultMap id="RolePermission" type="com.thesis.common.model.dto.RolePermissionDto" extends="BaseResultMap">
+        <collection property="permissions" select="com.thesis.dao.mapper.RolePermissionMapper.getPermissionByRole"
+                    column="id"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, name, descr
@@ -19,24 +20,27 @@
         from role
         where id = #{id,jdbcType=TINYINT}
     </select>
-    <select id="getRoleByUsername" resultType="java.lang.String">
+    <select id="getRoleByUsername" resultMap="BaseResultMap">
         select c.id,c.name from user a join user_role b join role c
         on a.id=b.user_id and b.role_id = c.id and username=#{username}
     </select>
-    <select id="getRoles" resultType="com.thesis.common.model.vo.RoleVo">
-
+    <select id="getRoles" resultMap="RolePermission">
+        select * from role
+        <if test="id !=null">
+            where id = #{id,jdbcType=TINYINT}
+        </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
     delete from role
     where id = #{id,jdbcType=TINYINT}
   </delete>
-    <insert id="insert" parameterType="com.thesis.common.model.Role">
+    <insert id="insert" useGeneratedKeys="true" parameterType="com.thesis.common.model.Role">
     insert into role (id, name, descr
       )
     values (#{id,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.thesis.common.model.Role">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"  parameterType="com.thesis.common.model.Role">
         insert into role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

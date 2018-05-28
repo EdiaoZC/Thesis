@@ -19,6 +19,8 @@ import java.util.List;
 @EqualsAndHashCode
 public class RoleVo {
 
+    private Byte id;
+
     private String name;
 
     private String descr;

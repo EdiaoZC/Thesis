@@ -49,15 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/authentication/require",
             "/login.html",
             "/chat",
-            "/",
-            "/index",
             "/css/**",
             "/images/**",
             "/js/**",
             "/layui/**",
             "/json/**",
-            "/*.html",
-            "/main"
+            "/login.html",
             // other public endpoints of your API may be appended to this array
     };
 

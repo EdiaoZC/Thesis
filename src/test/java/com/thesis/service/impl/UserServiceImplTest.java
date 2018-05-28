@@ -24,4 +24,26 @@ public class UserServiceImplTest extends SpringTest {
         System.out.println(admin);
     }
 
+
+    @Test
+    public void register() {
+    }
+
+    @Test
+    public void userList() {
+    }
+
+    @Test
+    public void delUserById() {
+    }
+
+    @Test
+    public void updateUserById() {
+    }
+
+    @Test
+    public void getInfoById() {
+        Long id = 3L;
+        userService.getInfoById(id);
+    }
 }

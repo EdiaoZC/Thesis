@@ -8,4 +8,6 @@ package com.thesis.common.constants;
 public class Role {
 
     public static final String PATIENTS = "patients";
+
+    public static final Byte PATIENTS_TAG = 2;
 }

@@ -1,5 +1,6 @@
 package com.thesis.common.model.vo;
 
+import com.thesis.common.model.Role;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: ZcEdiaos
@@ -32,4 +34,6 @@ public class UserVo {
     private Date createTime;
 
     private List<String> status;
+
+    private Set<Role> roles;
 }

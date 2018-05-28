@@ -33,7 +33,6 @@ public class DefaultTokenServiceImplTest extends SpringTest {
         String token = UUID.randomUUID().toString();
         UserDetails user = new User("admin", "As110695", AuthorityUtils.NO_AUTHORITIES);
         Assert.assertEquals(tokenService.getUserInfoFromToken(token), security.getUser());
-        tokenService.saveToken(token, user);
         Assert.assertEquals(tokenService.getUserInfoFromToken(token), security.getUser());
     }
 

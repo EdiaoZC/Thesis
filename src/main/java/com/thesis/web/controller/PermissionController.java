@@ -1,10 +1,14 @@
 package com.thesis.web.controller;
 
+import com.thesis.common.constants.Error;
 import com.thesis.common.model.Permission;
 import com.thesis.common.model.Response;
 import com.thesis.common.model.Role;
+import com.thesis.common.model.form.PermissionForm;
+import com.thesis.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,43 +23,71 @@ import java.util.List;
  * @Date: 2018/4/11 11:34
  * @Description:
  */
-@Controller
+@RestController
 @RequestMapping("/permission")
 public class PermissionController {
 
+    @Autowired
+    private PermissionService permissionService;
 
     @ApiOperation("查看权限")
-    @GetMapping(value = "/{userId:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response<List<Permission>>> permissions(@PathVariable("userId") Integer userId) {
-        return ResponseEntity.ok(null);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Response<List<Permission>> permissions() {
+        final List<Permission> permissions = permissionService.permissionList();
+        return Response.<List<Permission>>builder().code(200)
+                .msg("success").data(permissions).build();
     }
 
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation("查看权限详细信息")
-    public ResponseEntity<Role> roleInfo(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(null);
+    public Response<Permission> roleInfo(@PathVariable("id") Integer id) {
+        final Permission permission = permissionService.permissionInfo(id);
+        return Response.<Permission>builder().code(200)
+                .msg("success").data(permission).build();
     }
 
 
-    @PostMapping()
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation("添加权限信息")
-    public ResponseEntity<Role> addRole(@Valid Permission permission, Errors errors) {
-        return ResponseEntity.ok(null);
+    public Response addRole(@Valid PermissionForm permission, Errors errors) {
+        final boolean result = permissionService.addPermission(permission);
+        if (result) {
+            return Response.builder()
+                    .code(200).msg("success").build();
+        } else {
+            return Response.builder()
+                    .code(400).msg("fail").build();
+        }
     }
 
 
-    @PutMapping()
+    @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation("更新权限信息")
-    public ResponseEntity<String> updateRole(Role role) {
-        return ResponseEntity.ok(null);
+    public Response updateRole(@Valid PermissionForm permission, Errors errors) {
+        final boolean result = permissionService.updatePermission(permission);
+        if (result) {
+            return Response.builder()
+                    .code(200).msg("success").build();
+        } else {
+            return Response.builder()
+                    .code(400).msg("fail").build();
+        }
     }
 
 
-    @DeleteMapping()
+    @DeleteMapping(value = "/{id}")
     @ApiOperation("删除权限信息")
-    public ResponseEntity<String> delRole(Role role) {
-        return ResponseEntity.ok(null);
+    public Response
+    delRole(@PathVariable("id") Integer id) {
+        final int result = permissionService.delPermission(id);
+        if (result >= 1) {
+            return Response.builder()
+                    .code(200).msg("success").build();
+        } else {
+            return Response.builder()
+                    .code(400).msg("fail").build();
+        }
     }
 
 }

@@ -85,4 +85,7 @@
       per_desc = #{perDesc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="permissionList" resultType="com.thesis.common.model.Permission">
+        select * from permission
+    </select>
 </mapper>
