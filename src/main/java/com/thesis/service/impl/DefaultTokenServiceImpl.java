@@ -27,18 +27,17 @@ public class DefaultTokenServiceImpl implements TokenService {
 
     @Autowired
     private SecurityProperties security;
-//
-//    private LoadingCache<String, UserDetails> tokenCache = CacheBuilder.newBuilder()
-//            .maximumSize(10000)
-//            .expireAfterAccess(30, TimeUnit.MINUTES)
-//            .build(new CacheLoader<String, UserDetails>() {
-//                @Override
-//                public UserDetails load(String key) throws Exception {
-//                    return security.getUser();
-//                }
-//            });
 
-    private ConcurrentHashMap<String, UserDetails> tokenCache = new ConcurrentHashMap<>();
+    private LoadingCache<String, UserDetails> tokenCache = CacheBuilder.newBuilder()
+            .maximumSize(10000)
+            .expireAfterAccess(30, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, UserDetails>() {
+                @Override
+                public UserDetails load(String key) throws Exception {
+                    return security.getUser();
+                }
+            });
+
 
     private ConcurrentHashMap<Long, String> userToken = new ConcurrentHashMap<>();
 
@@ -70,7 +69,6 @@ public class DefaultTokenServiceImpl implements TokenService {
                 , credentialsNonExpired, accountNonLocked, details.getAuthorities());
         log.info("newUser对象是:{}", newUser);
         tokenCache.put(token, newUser);
-//        tokenCache.refresh(token);
     }
 
     @Override

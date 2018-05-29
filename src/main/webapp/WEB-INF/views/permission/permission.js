@@ -16,6 +16,72 @@ layui.config({
         })
     }
 
+    $(".permissionAdd_btn").click(function () {
+        var index = layui.layer.open({
+            title: "添加角色",
+            type: 2,
+            content: "addPermission.html",
+            success: function (layero, index) {
+                setTimeout(function () {
+                    layui.layer.tips('点击此处返回角色列表', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                }, 500)
+            }
+        });
+        //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+        $(window).resize(function () {
+            layui.layer.full(index);
+        });
+        layui.layer.full(index);
+    });
+
+
+    $("body").on("click", ".users_edit", function () {
+        var _this = $(this);
+        var index = layui.layer.open({
+            title: "修改成员",
+            type: 2,
+            content: "editPermission.html?id=" + _this.attr("data-id"),
+            success: function (layero, index) {
+                setTimeout(function () {
+                    layui.layer.tips('点击此处返回权限列表', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                }, 500)
+            }
+        });
+        //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+        $(window).resize(function () {
+            layui.layer.full(index);
+        });
+        layui.layer.full(index);
+    });
+
+    $("body").on("click", ".users_del", function () {  //删除
+        var _this = $(this);
+        layer.confirm('确定删除此角色？', {icon: 3, title: '提示信息'}, function (index) {
+            var currData = usersData.data;
+            for (var i = 0; i < currData.length; i++) {
+                if (currData[i].id == _this.attr("data-id")) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/permission/" + _this.attr("data-id"),
+                        async: true,
+                        success: function () {
+                            layer.alert("删除成功");
+                            loadRoles();
+                        },
+                        error: function () {
+                            layer.alert("删除失败");
+                        }
+                    })
+                }
+            }
+            layer.close(index);
+        });
+    });
+
     loadRoles();
 
     //渲染角色数据

@@ -50,7 +50,7 @@ public class PermissionController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation("添加权限信息")
-    public Response addRole(@Valid PermissionForm permission, Errors errors) {
+    public Response addPermission(@Valid PermissionForm permission, Errors errors) {
         final boolean result = permissionService.addPermission(permission);
         if (result) {
             return Response.builder()
@@ -64,7 +64,7 @@ public class PermissionController {
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation("更新权限信息")
-    public Response updateRole(@Valid PermissionForm permission, Errors errors) {
+    public Response updatePermission(@Valid PermissionForm permission, Errors errors) {
         final boolean result = permissionService.updatePermission(permission);
         if (result) {
             return Response.builder()

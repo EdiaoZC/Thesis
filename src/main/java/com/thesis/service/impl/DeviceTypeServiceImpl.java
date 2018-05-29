@@ -2,6 +2,7 @@ package com.thesis.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.thesis.common.model.DeviceType;
+import com.thesis.common.model.Response;
 import com.thesis.common.model.form.DeviceTypeForm;
 import com.thesis.common.model.vo.DeviceTypeVo;
 import com.thesis.dao.mapper.DeviceMapper;
@@ -74,13 +75,13 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
     }
 
     @Override
-    public boolean delType(Byte id) {
+    public Response<String> delType(Byte id) {
         int count = deviceMapper.getDeviceByType(id);
         if (count > 0) {
-            throw new RuntimeException("该类型下有其它设备，无法删除");
+            return Response.<String>builder().code(400).msg("该类型下有其它设备，无法删除").build();
         } else {
             deviceTypeMapper.deleteByPrimaryKey(id);
-            return true;
+            return Response.<String>builder().code(200).msg("success").build();
         }
     }
 }

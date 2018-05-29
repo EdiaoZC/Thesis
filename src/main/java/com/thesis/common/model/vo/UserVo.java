@@ -36,4 +36,6 @@ public class UserVo {
     private List<String> status;
 
     private Set<Role> roles;
+
+    private String comment;
 }

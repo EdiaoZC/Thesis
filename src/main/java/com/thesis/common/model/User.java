@@ -26,6 +26,8 @@ public class User {
 
     private Byte status;
 
+    private String comment;
+
     private Date createTime;
 
     private Date updateTime;

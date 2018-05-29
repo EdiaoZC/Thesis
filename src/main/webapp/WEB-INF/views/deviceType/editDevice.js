@@ -23,8 +23,8 @@ layui.config({
         type: "GET",
         async: true,
         success: function (data) {
-            $('.name').val(data.deviceType);
-            var json = JSON.parse(data.runningParam);
+            $('.name').val(data.data.deviceType);
+            var json = JSON.parse(data.data.runningParam);
             var tr = "";
             json.forEach(function (item) {
                 var param = unescape("run[" + i + "]");

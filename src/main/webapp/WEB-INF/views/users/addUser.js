@@ -8,13 +8,13 @@ layui.config({
     $.ajax({
         url: "/roles/",
         type: "GET",
-        async: true,
+        async: false,
         success: function (data) {
             var roles = data.data;
             var dataHtml = '';
             for (var i = 0; i < roles.length; i++) {
                 dataHtml += '<input type="checkbox" name="roles" value="' + roles[i].id +
-                    '" title="' + roles[i].name + '"/>';
+                    '" title="' + roles[i].name + '" class="role"/>';
             }
             $('.roles').html(dataHtml);
             form.render();

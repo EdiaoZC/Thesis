@@ -29,38 +29,37 @@ public class DeviceTypeController {
 
     @ApiOperation("获取设备类型")
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response<Object>> deviceTypeVoList() {
+    public Response<Object> deviceTypeVoList() {
         List<DeviceTypeVo> deviceTypeList = deviceTypeService.deviceTypeList();
         final Response<Object> result = Response.builder().msg("success").data(deviceTypeList).build();
-        return ResponseEntity.ok(result);
+        return result;
     }
 
     @ApiOperation("获取设备类型")
     @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<DeviceTypeVo> deviceTypeInfo(@PathVariable("id") Byte id) {
+    public Response<DeviceTypeVo> deviceTypeInfo(@PathVariable("id") Byte id) {
         DeviceTypeVo deviceTypeVo = deviceTypeService.deviceType(id);
-        return ResponseEntity.ok(deviceTypeVo);
+        return Response.<DeviceTypeVo>builder().code(200).msg("success").data(deviceTypeVo).build();
     }
 
     @ApiOperation("新增设备类型")
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> addDeviceType(DeviceTypeForm deviceTypeForm) {
+    public Response<String> addDeviceType(DeviceTypeForm deviceTypeForm) {
         log.info("deviceTypeForm对象是:{}", deviceTypeForm);
         deviceTypeService.addType(deviceTypeForm);
-        return ResponseEntity.ok("success");
+        return Response.<String>builder().code(200).msg("success").build();
     }
 
     @ApiOperation("获取设备类型")
     @PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> updateDeviceType(DeviceTypeForm deviceTypeForm) {
+    public Response<String> updateDeviceType(DeviceTypeForm deviceTypeForm) {
         deviceTypeService.updateInfo(deviceTypeForm);
-        return ResponseEntity.ok("success");
+        return Response.<String>builder().code(200).msg("success").build();
     }
 
     @ApiOperation("删除设备类型")
     @DeleteMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> delDeviceType(@PathVariable("id") Byte id) {
-        deviceTypeService.delType(id);
-        return ResponseEntity.ok("success");
+    public Response<String> delDeviceType(@PathVariable("id") Byte id) {
+        return deviceTypeService.delType(id);
     }
 }

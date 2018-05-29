@@ -38,4 +38,6 @@ public class UserForm {
     private List<Byte> status;
 
     private List<Byte> roles;
+
+    private String comment;
 }

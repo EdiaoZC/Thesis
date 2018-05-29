@@ -27,6 +27,11 @@ public class TrainingResultForm {
     private String deviceType;
 
     /**
+     * 设备编号
+     */
+    private String deviceId;
+
+    /**
      * 实际运行参数
      */
     private String actualParam;

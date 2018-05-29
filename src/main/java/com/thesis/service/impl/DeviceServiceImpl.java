@@ -111,9 +111,9 @@ public class DeviceServiceImpl implements DeviceService {
             log.error("出现错误:{}", e);
         } finally {
             lock.unlock();
+            deferredHolder.remove(token);
         }
         final List<RunningParam> result = (List<RunningParam>) deferResult.getResult();
-        deferredHolder.remove(token);
         return result;
     }
 

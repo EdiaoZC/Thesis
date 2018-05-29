@@ -9,6 +9,7 @@
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
@@ -18,7 +19,7 @@
     </sql>
 
     <sql id="Base_Column_List">
-    id, username, password, salt, nickname, sex, status, create_time, update_time
+    id, username, password, salt, nickname, sex, status,comment, create_time, update_time
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -32,7 +33,7 @@
     </select>
     <select id="getAllInfo" resultType="com.thesis.common.model.User">
         select
-        <include refid="baseColumn"/>
+        <include refid="baseColumn"/>,comment
         from user
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -41,11 +42,11 @@
   </delete>
     <insert id="insert" parameterType="com.thesis.common.model.User">
     insert into user (id, username, password, 
-      salt, nickname, sex, status, 
+      salt, nickname, sex, status, comment,
       create_time, update_time)
     values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=CHAR}, 
       #{salt,jdbcType=CHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{comment,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
     <insert id="insertSelective" parameterType="com.thesis.common.model.User">
         insert into user
@@ -70,6 +71,9 @@
             </if>
             <if test="status != null">
                 status,
+            </if>
+            <if test="comment != null">
+                comment,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -100,6 +104,9 @@
             <if test="status != null">
                 #{status,jdbcType=TINYINT},
             </if>
+            <if test="comment !=null">
+                #{comment,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -129,6 +136,9 @@
             <if test="status != null">
                 status = #{status,jdbcType=TINYINT},
             </if>
+            <if test="comment !=null">
+                comment = #{comment,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -146,6 +156,7 @@
       nickname = #{nickname,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=CHAR},
       status = #{status,jdbcType=TINYINT},
+      comment = #{comment,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

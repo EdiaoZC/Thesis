@@ -1,7 +1,6 @@
 package com.thesis.service.impl;
 
 import com.thesis.common.exception.RoleException;
-import com.thesis.common.model.Response;
 import com.thesis.common.model.dto.UserRoleDto;
 import com.thesis.dao.mapper.UserRoleMapper;
 import com.thesis.service.UserRoleService;

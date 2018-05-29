@@ -47,7 +47,7 @@ public class PermissionServiceImpl implements PermissionService {
     public boolean addPermission(PermissionForm permissionForm) {
         Permission permission = new Permission();
         BeanUtils.copyProperties(permissionForm, permission);
-        return permissionMapper.insert(permission) > 1;
+        return permissionMapper.insertSelective(permission) == 1;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class PermissionServiceImpl implements PermissionService {
     public boolean updatePermission(PermissionForm permissionForm) {
         Permission permission = new Permission();
         BeanUtils.copyProperties(permissionForm, permission);
-        return permissionMapper.insert(permission) > 1;
+        return permissionMapper.updateByPrimaryKey(permission) == 1;
     }
 }

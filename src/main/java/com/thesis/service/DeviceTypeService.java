@@ -1,5 +1,6 @@
 package com.thesis.service;
 
+import com.thesis.common.model.Response;
 import com.thesis.common.model.form.DeviceTypeForm;
 import com.thesis.common.model.vo.DeviceTypeVo;
 
@@ -51,5 +52,5 @@ public interface DeviceTypeService {
      * @param id
      * @return 是否删除成功
      */
-    boolean delType(Byte id);
+    Response<String> delType(Byte id);
 }

@@ -16,8 +16,7 @@ layui.config({
         })
     }
 
-    loadRoles();
-
+    loadRoles()
     $(".roleAdd_btn").click(function () {
         var index = layui.layer.open({
             title: "添加角色",
@@ -71,7 +70,7 @@ layui.config({
                         async: true,
                         success: function () {
                             layer.alert("删除成功");
-                            loadUser();
+                            loadRoles();
                         },
                         error: function () {
                             layer.alert("删除失败");

@@ -16,43 +16,16 @@ layui.config({
         return result;
     }
 
-    function loadDeviceType() {
-        $.ajax({
-            url: "/deviceType",
-            type: "GET",
-            async: false,
-            success: function (data) {
-                currData = data.data;
-                html = "";
-                if (currData.length != 0) {
-                    for (var i = 0; i < currData.length; i++) {
-                        html = '<option value="' + currData[i].id + '">';
-                        html += currData[i].deviceType + '</option>';
-                        console.log(html);
-                        $('.deviceType').append($(html));
-                    }
-                } else {
-                    $('.deviceType').append($(html));
-                }
-                form.render();
-                return false;
-            },
-            error: function () {
-
-            }
-        })
-    }
-
-    loadDeviceType();
 
     $(".id").val(oneValues());
     $.ajax({
-        url: "/devices/id/" + oneValues(),
+        url: "/permission/" + oneValues(),
         type: "GET",
         async: true,
         success: function (data) {
-            $('.deviceId').val(data.deviceId);
-            $('.deviceType').val(data.equipmentType);
+            $('.name').val(data.data.perName);
+            $('.perUrl').val(data.data.perUrl);
+            $('.desc').val(data.data.perDesc)
             form.render();
         }
     })
@@ -60,7 +33,7 @@ layui.config({
     form.on("submit(editDevice)", function () {
         var data = $(".edit-form").serialize();
         $.ajax({
-            url: "/devices",
+            url: "/permission",
             data: data,
             type: "PUT",
             async: true,
