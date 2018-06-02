@@ -19,11 +19,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 @Slf4j
-public class ExceptionController {
+public class ExceptionController implements InitializingBean {
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(AccountException.class)
     public Response<String> exception(Throwable e) {
         return Response.<String>builder().code(400)
                 .msg("fail").msg(e.getMessage()).build();
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("初始化");
     }
 }

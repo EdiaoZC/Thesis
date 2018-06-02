@@ -64,9 +64,6 @@
             </div>
             <!-- 顶部右侧菜单 -->
             <ul class="layui-nav top_menu">
-                <#--<li class="layui-nav-item showNotice" id="showNotice" pc>-->
-                    <#--<a href="javascript:;"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>-->
-                <#--</li>-->
                 <li class="layui-nav-item" mobile>
                     <a href="javascript:;" class="mobileAddTab" data-url="page/user/changePwd.html"><i
                             class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>设置</cite></a>
@@ -74,23 +71,12 @@
                 <li class="layui-nav-item" mobile>
                     <a href="/logout" class="signOut"><i class="iconfont icon-loginout"></i> 退出</a>
                 </li>
-                <#--<li class="layui-nav-item lockcms" pc>-->
-                    <#--<a href="javascript:;"><i class="iconfont icon-lock1"></i><cite>锁屏</cite></a>-->
-                <#--</li>-->
                 <li class="layui-nav-item" pc>
                     <a href="javascript:;">
                         <img src="images/face.jpg" class="layui-circle" width="35" height="35">
                         <cite></cite>
                     </a>
                     <dl class="layui-nav-child">
-                    <#--<dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="iconfont icon-zhanghu"-->
-                    <#--data-icon="icon-zhanghu"></i><cite>个人资料</cite></a>-->
-                    <#--</dd>-->
-                    <#--<dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1"-->
-                    <#--data-icon="icon-shezhi1"></i><cite>修改密码</cite></a>-->
-                    <#--</dd>-->
-                    <#--<dd><a href="javascript:;" class="changeSkin"><i-->
-                    <#--class="iconfont icon-huanfu"></i><cite>更换皮肤</cite></a></dd>-->
                         <dd><a href="/user/logout" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a>
                         </dd>
                     </dl>
@@ -104,7 +90,7 @@
             <a class="img" title="我的头像"><img src="images/face.jpg"></a>
             <p>你好！<span class="userName"></span>, 欢迎登录</p>
         </div>
-        <div class="navBar layui-side-scroll"></div>
+        <div id="nav" class="navBar layui-side-scroll" lay-filter="demo"></div>
     </div>
     <!-- 右侧内容 -->
     <div class="layui-body layui-form">
@@ -144,9 +130,6 @@
 <div class="site-mobile-shade"></div>
 
 <script type="text/javascript" src="layui/layui.js"></script>
-<script type="text/javascript" src="js/leftNav.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<#--<script type="text/javascript" src="js/lib/sockjs.js"></script>-->
-<#--<script type="text/javascript" src="js/sock.js"></script>-->
 </body>
 </html>

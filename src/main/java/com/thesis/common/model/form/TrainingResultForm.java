@@ -19,12 +19,7 @@ public class TrainingResultForm {
     /**
      * 用户编号
      */
-    private String patientId;
-
-    /**
-     * 设备类型
-     */
-    private String deviceType;
+    private String username;
 
     /**
      * 设备编号

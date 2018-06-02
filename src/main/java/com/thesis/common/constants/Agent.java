@@ -9,7 +9,7 @@ public class Agent {
 
     public final static String AGENT = "User-Agent";
 
-    public final static String WEB = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36";
+    public final static String WEB = "Mozilla/5.0";
 
 
 }

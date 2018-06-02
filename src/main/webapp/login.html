@@ -19,9 +19,7 @@
     </style>
 </head>
 <body style=".bg">
-<div class="video_mask"></div>
 <div class="login">
-    <h1>layuiCMS-管理登录</h1>
     <form class="layui-form">
         <div class="layui-form-item">
             <input class="layui-input" name="username" placeholder="用户名" lay-verify="required" type="text"
@@ -31,11 +29,17 @@
             <input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password"
                    autocomplete="off">
         </div>
-        <!--<div class="layui-form-item form_code">-->
-        <!--<input class="layui-input" name="code" placeholder="验证码" lay-verify="required" type="text"-->
-        <!--autocomplete="off">-->
-        <!--<div class="code"><img src="../../images/code.jpg" width="116" height="36"></div>-->
-        <!--</div>-->
+        <div class="layui-form-item form_code">
+            <input class="layui-input codeValue" name="code" placeholder="验证码"
+                   lay-verify="required" type="text" autocomplete="off">
+            <div class="code"><img class="codeImage" width="116" height="36"></div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">记住我</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name='remember-me' id='rememberMe' />
+            </div>
+        </div>
         <button class="layui-btn login_btn" lay-submit="" lay-filter="login">登录</button>
     </form>
 </div>

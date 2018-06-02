@@ -21,7 +21,7 @@ layui.config({
 
         function loadDeviceType() {
             $.ajax({
-                url: "/doctor/device/token/" + oneValues(),
+                url: "/doctor/token/" + oneValues(),
                 type: "GET",
                 async: true,
                 success: function (data) {
@@ -74,7 +74,7 @@ layui.config({
         form.on("submit(addDevice)", function (data) {
             var formdata = $(".layui-form").serialize();
             $.ajax({
-                url: "/doctor/device",
+                url: "/doctor",
                 data: formdata,
                 type: "POST",
                 async: true,
@@ -84,6 +84,8 @@ layui.config({
                         top.layer.close(index);
                         layer.closeAll("iframe");
                         //刷新父页面
+                        parent.location.reload();
+                        window.location.href = "/index";
                     }, 500);
                 },
                 error: function () {

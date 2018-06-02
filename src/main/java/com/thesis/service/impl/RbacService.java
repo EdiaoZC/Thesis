@@ -79,7 +79,8 @@ public class RbacService {
                 String path = request.getRequestURI().replace(request.getServletContext().getContextPath(), "");
                 for (String url : urls) {
                     for (String prefix : prefixs) {
-                        if (pathMatcher.match(url, prefix + path)) {
+                        log.info("权限url:{}====访问路径：{}", prefix + url, path);
+                        if (pathMatcher.match(prefix + url, path)) {
                             return true;
                         }
                     }

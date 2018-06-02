@@ -22,23 +22,8 @@
                     type: "GET",
                     success: function (result) {
                         if (result.code == 200) {
-                            var index = layui.layer.open({
-                                title: "添加设备",
-                                type: 2,
-                                content: "/page/doctor/handler.html?token=" + data,
-                                success: function (layero, index) {
-                                    setTimeout(function () {
-                                        layui.layer.tips('点击此处返回设备列表', '.layui-layer-setwin .layui-layer-close', {
-                                            tips: 3
-                                        });
-                                    }, 500)
-                                }
-                            })
-                            //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
-                            $(window).resize(function () {
-                                layui.layer.full(index);
-                            })
-                            layui.layer.full(index);
+                            window.location.href = "/views/doctor/handler.html?token=" + data;
+                            return false;
                         } else {
                             layer.alert("该请求已经被其他人处理了");
                         }
@@ -52,7 +37,6 @@
         );
     }
 </script>
-<p onclick="doclick('hello')">请求测试</p>
 <div class="layui-form users_list">
     <table class="layui-table">
         <thead>

@@ -91,8 +91,18 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<RunningParam> requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
+        if (preHandle.contains(token) || doHandle.contains(token)) {
+            return null;
+        }
         //设置超时
         DeferResult<List<RunningParam>> deferResult = new DeferResult<>(timeOut, timeOutObject);
+        deferResult.onTimeout(new Runnable() {
+            @Override
+            public void run() {
+                preHandle.remove(token);
+                doHandle.remove(token);
+            }
+        });
         deferredHolder.put(token, deferResult);
         preHandle.put(token, form);
         final String deviceId = form.getDeviceId();
@@ -148,7 +158,8 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceRequestVo doHandle(String token) {
-        final DeviceRequestForm deviceRequestForm = preHandle.get(token);
+        final DeviceRequestForm deviceRequestForm = doHandle.get(token);
+        log.info("deviceRequestForm对象是:{}", deviceRequestForm);
         String username = deviceRequestForm.getUsername();
         String deviceId = deviceRequestForm.getDeviceId();
         final String param = getRun(deviceId);

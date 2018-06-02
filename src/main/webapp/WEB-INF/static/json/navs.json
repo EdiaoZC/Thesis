@@ -1,13 +1,13 @@
 [
   {
     "title": "设备类型",
-    "icon": "icon-text",
+    "icon": "&#xe629;",
     "href": "views/deviceType/deviceList.html",
     "spread": false
   },
   {
     "title": "设备列表",
-    "icon": "icon-text",
+    "icon": "&#xe631;",
     "href": "views/devices/deviceList.html",
     "spread": false
   },
@@ -31,19 +31,19 @@
   },
   {
     "title": "权限管理",
-    "icon": "icon-text",
+    "icon": "&#xe631;",
     "href": "",
     "spread": false,
     "children": [
       {
         "title": "角色管理",
-        "icon": "icon-text",
+        "icon": "&#xe64c;",
         "href": "views/roles/roles.html",
         "spread": false
       },
       {
         "title": "权限管理",
-        "icon": "icon-text",
+        "icon": "&#xe629;",
         "href": "views/permission/permission.html",
         "spread": false
       }

@@ -26,4 +26,6 @@ public interface DeviceMapper {
     String getRunParamByDeviceId(String deviceId);
 
     boolean updateStatus(@Param("deviceId") String deviceId,@Param("status")int status);
+
+    int getDeviceTypeById(String deviceId);
 }

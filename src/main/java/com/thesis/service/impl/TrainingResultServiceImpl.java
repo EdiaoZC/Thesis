@@ -10,6 +10,7 @@ import com.thesis.common.model.form.TrainingResultForm;
 import com.thesis.common.model.vo.TrainingResultVo;
 import com.thesis.dao.mapper.DeviceMapper;
 import com.thesis.dao.mapper.TrainingResultMapper;
+import com.thesis.dao.mapper.UserMapper;
 import com.thesis.service.TrainingResultService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,8 @@ public class TrainingResultServiceImpl implements TrainingResultService {
     @Autowired
     private DeviceMapper deviceMapper;
 
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public List<TrainingResultVo> resultList() {
         final Set<String> roles = RolesHolder.getRoles();
@@ -60,6 +63,9 @@ public class TrainingResultServiceImpl implements TrainingResultService {
     public boolean addTrainingResult(TrainingResultForm resultForm) {
         TrainingResult result = new TrainingResult();
         BeanUtils.copyProperties(resultForm, result);
+        Long patientId = userMapper.selectByUsername(resultForm.getUsername()).getId();
+        deviceMapper.getDeviceTypeById(resultForm.getDeviceId());
+        result.setPatientId(patientId);
         log.info("result结果是:{}", result);
         deviceMapper.updateStatus(resultForm.getDeviceId(), Status.NORMAL);
         return resultMapper.insertSelective(result) == 1;

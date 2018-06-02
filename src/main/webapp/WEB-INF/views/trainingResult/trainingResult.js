@@ -10,13 +10,58 @@ layui.config({
     var usersData = '';
 
     function loadDeviceType() {
-        $.get("/training_result", function (data) {
+        $.get("/trainingResult", function (data) {
             usersData = data;
             deviceList();
         })
     }
 
     loadDeviceType();
+
+
+    //查询
+    $(".search_btn").click(function () {
+        var userArray = [];
+        if ($(".search_input").val() != '') {
+            var index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+            setTimeout(function () {
+                for (var i = 0; i < usersData.length; i++) {
+                    var usersStr = usersData[i];
+                    var selectStr = $(".search_input").val();
+
+                    function changeStr(data) {
+                        var dataStr = '';
+                        var showNum = data.split(eval("/" + selectStr + "/ig")).length - 1;
+                        if (showNum > 1) {
+                            for (var j = 0; j < showNum; j++) {
+                                dataStr += data.split(eval("/" + selectStr + "/ig"))[j] + "<i style='color:#03c339;font-weight:bold;'>" + selectStr + "</i>";
+                            }
+                            dataStr += data.split(eval("/" + selectStr + "/ig"))[showNum];
+                            return dataStr;
+                        } else {
+                            dataStr = data.split(eval("/" + selectStr + "/ig"))[0] + "<i style='color:#03c339;font-weight:bold;'>" + selectStr + "</i>" + data.split(eval("/" + selectStr + "/ig"))[1];
+                            return dataStr;
+                        }
+                    }
+
+                    //用户名
+                    if (usersStr.nickname.indexOf(selectStr) > -1) {
+                        usersStr["nickname"] = changeStr(usersStr.nickname);
+                    }
+                    if (usersStr.nickname.indexOf(selectStr) > -1) {
+                        userArray.push(usersStr);
+                    }
+                }
+                usersData = userArray;
+                deviceList(usersData);
+
+                layer.close(index);
+            }, 2000);
+        }
+        else {
+            layer.msg("请输入需要查询的内容");
+        }
+    })
 
     //渲染设备数据
     function deviceList() {

@@ -1,6 +1,7 @@
 package com.thesis.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.code.kaptcha.Constants;
 import com.thesis.common.constants.Agent;
 import com.thesis.common.holder.PasswordHolder;
 import com.thesis.common.model.Response;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 /**
@@ -56,10 +58,12 @@ public class AuthenticationController {
     @GetMapping(value = "/authentication/require", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> require(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
+        String agent = request.getHeader(Agent.AGENT);
         if (savedRequest != null) {
             String targetUrl = savedRequest.getRedirectUrl();
             log.info("跳转的url是:{}", targetUrl);
-            if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
+            if (StringUtils.endsWithIgnoreCase(targetUrl, ".html") ||
+                    (StringUtils.isNoneBlank(agent) && agent.startsWith(Agent.WEB))) {
                 log.info("失败url是：{}", failureUrl);
                 redirectStrategy.sendRedirect(request, response, failureUrl);
             }
@@ -74,18 +78,8 @@ public class AuthenticationController {
     }
 
     @GetMapping(value = "/user/logout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String agent = request.getHeader(Agent.AGENT);
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        }
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        if (Agent.WEB.equals(agent)) {
-            return "redirect:/authentication/require";
-        } else {
-            return JSON.toJSONString(Response.builder().code(200).msg("success").build());
-        }
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+
     }
 
 }

@@ -10,6 +10,7 @@ import com.thesis.common.model.vo.UserVo;
 import com.thesis.common.util.CookieUtil;
 import com.thesis.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,7 +67,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
                     , ((UserDetails) details).getAuthorities());
             tokenService.saveToken(token, ((DefaultUserDetails) details).getId(), user);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            if (Agent.WEB.equals(agent)) {
+            if (StringUtils.isNoneBlank(agent) && agent.startsWith(Agent.WEB)) {
                 log.debug("将token写入cookie");
                 CookieUtil.addCookie(request, response, security.getToken(), token, true, 30, TimeUnit.MINUTES);
                 writer.write(JSON.toJSONString(Response.builder().code(200).data(successUrl).build()));

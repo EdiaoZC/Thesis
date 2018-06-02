@@ -26,7 +26,7 @@ import java.util.List;
  * @Description:
  */
 @RestController
-@RequestMapping("/training_result")
+@RequestMapping("/trainingResult")
 public class TrainingResultController {
 
     @Autowired

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thesis.dao.mapper.DeviceMapper">
+
+    <cache eviction="FIFO" flushInterval="3600000" size="10000" readOnly="true"/>
     <resultMap id="BaseResultMap" type="com.thesis.common.model.Device">
         <id column="id" jdbcType="SMALLINT" property="id"/>
         <result column="device_id" jdbcType="VARCHAR" property="deviceId"/>
@@ -41,7 +43,7 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
     delete from device
-    where id = #{id,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=SMALLINT} and equipment_state != 1
   </delete>
     <insert id="insert" parameterType="com.thesis.common.model.Device">
     insert into device (id,device_id equipment_type, equipment_state,
@@ -123,6 +125,9 @@
     where id = #{id,jdbcType=SMALLINT}
   </update>
     <update id="updateStatus">
-        update device set equipment_state = #{status} where id=#{deviceId};
+        update device set equipment_state = #{status} where device_id=#{deviceId};
     </update>
+    <select id="getDeviceTypeById">
+        select equipment_type  from device where device_id = #{deviceId};
+    </select>
 </mapper>
