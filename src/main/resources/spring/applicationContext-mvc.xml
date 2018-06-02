@@ -48,6 +48,14 @@
     </mvc:resources>
     <mvc:resources mapping="/views/**" location="/WEB-INF/views/"/>
 
+    <mvc:interceptors>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.thesis.web.interceptors.ResourceHandlerInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
         <property name="config">
             <bean class="com.google.code.kaptcha.util.Config">
