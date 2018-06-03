@@ -20,4 +20,6 @@ public interface UserMapper {
     User selectByUsername(String username);
 
     List<User> getAllInfo();
+
+    String getCommentByName(String username);
 }

@@ -21,4 +21,6 @@ public class DeviceRequestVo {
     private String params;
 
     private List<TrainingResultVo> results;
+
+    private String comment;
 }

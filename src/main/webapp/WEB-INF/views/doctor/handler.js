@@ -35,6 +35,7 @@ layui.config({
                             "<td><input type='text' value=" + item.value + " name=" + param + ".value class='layui-input' /></td></tr>";
                         i++;
                     });
+                    $('.comment').val(data.data.comment);
                     $("#runningParam").append(tr);//向table中追加tr
                     deviceList();
                     form.render();

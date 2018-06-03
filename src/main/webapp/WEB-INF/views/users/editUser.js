@@ -54,6 +54,7 @@ layui.config({
             for (var i = 0; i < roles.length; i++) {
                 $("input[type='checkbox'][name='roles'][value='" + roles[i].id + "']").prop('checked', true);
             }
+            $('.comment').val(data.comment)
             form.render();
         }
     });

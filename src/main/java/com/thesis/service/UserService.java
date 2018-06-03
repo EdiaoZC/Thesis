@@ -63,4 +63,6 @@ public interface UserService {
      * @return 用户信息
      */
     UserVo getInfoById(Long id);
+
+    String getCommentByName(String username);
 }

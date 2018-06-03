@@ -16,6 +16,7 @@ import com.thesis.common.model.vo.TrainingResultVo;
 import com.thesis.dao.mapper.DeviceMapper;
 import com.thesis.service.DeviceService;
 import com.thesis.service.TrainingResultService;
+import com.thesis.service.UserService;
 import com.thesis.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +46,8 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceMapper deviceMapper;
     @Autowired
     private WebSocketService webSocketService;
+    @Autowired
+    private UserService userService;
 
     private ConcurrentHashMap<String, DeviceRequestForm> preHandle;
 
@@ -92,6 +95,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<RunningParam> requestDevice(String token, DeviceRequestForm form) throws TimeoutException {
         if (preHandle.contains(token) || doHandle.contains(token)) {
+            log.info("该token 已经申请了");
             return null;
         }
         //设置超时
@@ -164,9 +168,11 @@ public class DeviceServiceImpl implements DeviceService {
         String deviceId = deviceRequestForm.getDeviceId();
         final String param = getRun(deviceId);
         final List<TrainingResultVo> resultVos = resultService.personalResult(username, deviceId);
+        String comment = userService.getCommentByName(username);
         DeviceRequestVo vo = new DeviceRequestVo();
         vo.setParams(param);
         vo.setResults(resultVos);
+        vo.setComment(comment);
         return vo;
     }
 

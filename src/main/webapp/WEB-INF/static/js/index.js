@@ -8,7 +8,8 @@ layui.config({
     $ = layui.jquery;
 
     var tabIndex = 0;
-    var array = new Array()
+    var array = new Array();
+    array.push("/views/main.html");
     var navbar = layui.navbar();
     navbar.set({
         elem: '#nav',
@@ -25,8 +26,10 @@ layui.config({
                     layer.alert(result.msg);
                     return false;
                 } else {
-                    tabIndex++;
-                    if (array.indexOf(data.field.href)) {
+                    var index = array.indexOf(data.field.href);
+                    console.log(data.field.href + "========" + index)
+                    if (index < 0) {
+                        tabIndex++;
                         array.push(data.field.href);
                         element.tabAdd("bodyTab", {
                             title: data.field.title,
@@ -35,6 +38,9 @@ layui.config({
                             id: tabIndex
                         });
                         element.tabChange("bodyTab", tabIndex);
+                    } else {
+                        console.log("change", index);
+                        element.tabChange("bodyTab", index);
                     }
                 }
             }

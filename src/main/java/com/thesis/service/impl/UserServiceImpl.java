@@ -63,17 +63,16 @@ public class UserServiceImpl implements UserService {
         user.setSalt(salt);
         user.setPassword(Md5Util.getMD5AndSalt(userForm.getPassword(), salt));
         UserRoleDto userRoleDto = new UserRoleDto();
-        userMapper.insertSelective(user);
+        if (userMapper.insertSelective(user) != 1) {
+            return Response.<String>builder().code(400)
+                    .msg("fail").data("失败").build();
+        }
         userRoleDto.setUserId(user.getId());
         userRoleDto.setRoleIds(userForm.getRoles());
         boolean result = userRoleService.updateUserRole(userRoleDto);
         if (!result) {
             return Response.<String>builder().code(400).msg("fail")
                     .data("患者角色与其他角色不能同时存在").build();
-        }
-        if (userMapper.insertSelective(user) != 1) {
-            return Response.<String>builder().code(400)
-                    .msg("fail").data("失败").build();
         }
         return Response.<String>builder().code(200)
                 .msg("success").data("成功").build();
@@ -159,6 +158,11 @@ public class UserServiceImpl implements UserService {
         final Set<Role> roles = roleService.getRoleByUsername(user.getUsername());
         userVo.setRoles(roles);
         return userVo;
+    }
+
+    @Override
+    public String getCommentByName(String username) {
+        return userMapper.getCommentByName(username);
     }
 
 

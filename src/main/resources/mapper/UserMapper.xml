@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thesis.dao.mapper.UserMapper">
 
-    <cache eviction="FIFO" flushInterval="3600000"  size="10000" readOnly="true"/>
+    <cache eviction="FIFO" flushInterval="3600000" size="10000" readOnly="true"/>
     <resultMap id="BaseResultMap" type="com.thesis.common.model.User">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
@@ -42,7 +42,7 @@
     delete from user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.thesis.common.model.User">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.thesis.common.model.User">
     insert into user (id, username, password, 
       salt, nickname, sex, status, comment,
       create_time, update_time)
@@ -50,7 +50,7 @@
       #{salt,jdbcType=CHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
       #{comment,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" parameterType="com.thesis.common.model.User">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.thesis.common.model.User">
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -163,4 +163,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <select id="getCommentByName" resultType="java.lang.String">
+        select comment from user  where username = #{username}
+    </select>
 </mapper>
