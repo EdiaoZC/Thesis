@@ -31,7 +31,6 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUserRole(UserRoleDto userRoleDto) throws RoleException {
         final List<Byte> roleIds = userRoleDto.getRoleIds();
-        log.info("roleIds对象：{}", roleIds);
         if (roleIds.contains(com.thesis.common.constants.Role.PATIENTS_TAG) && roleIds.size() != 1) {
             return false;
         }

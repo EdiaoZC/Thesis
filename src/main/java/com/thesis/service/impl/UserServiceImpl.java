@@ -117,7 +117,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public Response<String> updateUserById(UserForm userForm, String token) {
         User user = new User();
-        log.info("token是多少:{}", token);
         BeanUtils.copyProperties(userForm, user);
         byte status = 0;
         if (userForm.getStatus() != null) {

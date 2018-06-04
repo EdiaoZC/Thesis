@@ -50,6 +50,7 @@ public class TokenFilter extends OncePerRequestFilter {
         if (token == null) {
             token = request.getParameter(security.getToken());
         }
+        log.debug("token:{}", token);
         TokenHolder.set(token);
         if (token != null) {
             try {

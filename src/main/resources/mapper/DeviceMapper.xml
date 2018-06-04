@@ -127,7 +127,7 @@
     <update id="updateStatus">
         update device set equipment_state = #{status} where device_id=#{deviceId};
     </update>
-    <select id="getDeviceTypeById">
+    <select id="getDeviceTypeById" resultType="byte">
         select equipment_type  from device where device_id = #{deviceId};
     </select>
 </mapper>

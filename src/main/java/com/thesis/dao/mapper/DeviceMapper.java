@@ -27,5 +27,5 @@ public interface DeviceMapper {
 
     boolean updateStatus(@Param("deviceId") String deviceId,@Param("status")int status);
 
-    int getDeviceTypeById(String deviceId);
+    Byte getDeviceTypeById(String deviceId);
 }

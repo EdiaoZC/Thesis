@@ -39,5 +39,5 @@ public class TrainingResultForm {
     /**
      * 评价
      */
-    private String score;
+    private Byte score;
 }

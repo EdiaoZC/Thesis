@@ -39,6 +39,7 @@ public class TrainingResultServiceImpl implements TrainingResultService {
 
     @Autowired
     private UserMapper userMapper;
+
     @Override
     public List<TrainingResultVo> resultList() {
         final Set<String> roles = RolesHolder.getRoles();
@@ -63,10 +64,11 @@ public class TrainingResultServiceImpl implements TrainingResultService {
     public boolean addTrainingResult(TrainingResultForm resultForm) {
         TrainingResult result = new TrainingResult();
         BeanUtils.copyProperties(resultForm, result);
+        result.setTrainingScore(resultForm.getScore());
         Long patientId = userMapper.selectByUsername(resultForm.getUsername()).getId();
-        deviceMapper.getDeviceTypeById(resultForm.getDeviceId());
+        Byte deviceType = deviceMapper.getDeviceTypeById(resultForm.getDeviceId());
         result.setPatientId(patientId);
-        log.info("result结果是:{}", result);
+        result.setEquipmentType(deviceType);
         deviceMapper.updateStatus(resultForm.getDeviceId(), Status.NORMAL);
         return resultMapper.insertSelective(result) == 1;
     }
